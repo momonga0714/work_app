@@ -1,0 +1,169 @@
+.wrapper
+  .header
+    .header__box
+      .header__box__title
+      %font{:face => "arial black"}
+        = link_to "ZAIKO","/", class: "broccoli"
+.exhibit__main
+  .exhibit__main__itemProfile
+    .exhibit__main__itemProfile__inputForm
+    = form_with( model: @post, url: post_path,local: true) do |f|
+      .exhibit__main__itemProfile__inputForm__sellGoods
+        .exhibit__main__itemProfile__inputForm__sellGoods__name
+          .notation
+            物件名
+        = f.text_field :name, class: "exhibitInput"
+        .input__birthday__select
+          .input__birthday__select__year 
+            物件購入日（決済日）
+            = f.select :buy_year, {}, {prompt: "--"}, class: "birth_year", id: "input_error__birth_year", autofocus: true do
+              - array = []
+              - array[0] = ""
+              - for i in 1..150 do array[i] = 2021-i end
+              = options_for_select(array)
+            %span
+              年
+            = f.select :buy_month, {}, {prompt: "--"}, class: "birth_month", id: "input_error__birth_month", autofocus: true do
+              - array = []
+              - array[0] = ""
+              - for i in 1..12 do array[i] = 0+i end
+              = options_for_select(array)
+            %span
+              月
+            = f.select :buy_day, {}, {prompt: "--"}, class: "birth_day", id: "input_error__birth_day", autofocus: true do
+              - array = []
+              - array[0] = ""
+              - for i in 1..31 do array[i] = 0+i end
+              = options_for_select(array)
+            %span
+              日
+        .input__birthday__select
+          .input__birthday__select__year 
+            物件売却日（決済日）
+            = f.select :sell_year, {}, {prompt: "--"}, class: "birth_year", id: "input_error__birth_year", autofocus: true do
+              - array = []
+              - array[0] = ""
+              - for i in 1..150 do array[i] = 2021-i end
+              = options_for_select(array)
+            %span
+              年
+            = f.select :sell_month, {}, {prompt: "--"}, class: "birth_month", id: "input_error__birth_month", autofocus: true do
+              - array = []
+              - array[0] = ""
+              - for i in 1..12 do array[i] = 0+i end
+              = options_for_select(array)
+            %span
+              月
+            = f.select :sell_day, {}, {prompt: "--"}, class: "birth_day", id: "input_error__birth_day", autofocus: true do
+              - array = []
+              - array[0] = ""
+              - for i in 1..31 do array[i] = 0+i end
+              = options_for_select(array)
+            %span
+              日
+        
+        .exhibit__main__itemProfile__inputForm__sellGoods__description
+          .notation
+            物件の説明（取得経緯など）
+        = f.text_field :explanation, class: "exhibitInput"
+        .exhibit__main__itemProfile__inputForm__sellDetails__formBox
+          .exhibit__main__itemProfile__inputForm__sellDetails__formBox__category
+            .exhibit__main__itemProfile__inputForm__sellDetails__formBox__category__select
+              .notation
+                購入金額
+            = f.text_field :buy, class: "exhibitInput"
+          .exhibit__main__itemProfile__inputForm__sellDetails__formBox__category
+            .exhibit__main__itemProfile__inputForm__sellDetails__formBox__category__select
+              .notation
+                仲介手数料（購入時）
+            = f.text_field :buy_brokerage_fee, class: "exhibitInput"
+          .exhibit__main__itemProfile__inputForm__sellDetails__formBox__brand
+            .exhibit__main__itemProfile__inputForm__sellDetails__formBox__brand__write
+              .notation
+                登記費用
+            = f.text_field :registration_fee, class: "exhibitInput"
+          .exhibit__main__itemProfile__inputForm__sellDetails__formBox__brand
+            .exhibit__main__itemProfile__inputForm__sellDetails__formBox__brand__write
+              .notation
+                不動産取得税
+            = f.text_field :real_estate_acquisition_tax, class: "exhibitInput"
+          .exhibit__main__itemProfile__inputForm__sellDetails__formBox__brand
+            .exhibit__main__itemProfile__inputForm__sellDetails__formBox__brand__write
+              .notation
+                固定資産税
+            = f.text_field :property_tax, class: "exhibitInput"
+          .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state
+            .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state__select
+              .notation
+                印紙代（金消契約）
+            = f.text_field :buy_stamp_cost, class: "exhibitInput"
+          .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state
+            .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state__select
+              .notation
+                管理費（マンション）
+            = f.text_field :m_management_fee, class: "exhibitInput"
+          .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state
+            .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state__select
+              .notation
+                修繕積立金（マンション）
+            = f.text_field :m_repair_fund, class: "exhibitInput"
+          .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state
+            .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state__select
+              .notation
+                修繕費（現状回復）
+            = f.text_field :repair_cost, class: "exhibitInput"
+          .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state
+            .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state__select
+              .notation
+                金利
+            = f.text_field :interest_rate, class: "exhibitInput"
+          .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state
+            .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state__select
+              .notation
+                入居付
+            = f.text_field :rent_cost, class: "exhibitInput"
+          .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state
+            .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state__select
+              .notation
+                銀行事務手数料
+            = f.text_field :banking_fee, class: "exhibitInput"
+          .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state
+            .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state__select
+              .notation
+                管理費(1ヶ月あたり)
+            = f.text_field :management_fee, class: "exhibitInput"
+          .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state
+            .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state__select
+              .notation
+                火災保険（１年）
+            = f.text_field :fire_insurance, class: "exhibitInput"
+        .exhibit__main__itemProfile__inputForm__delivery__formBox  
+          .exhibit__main__itemProfile__inputForm__delivery__formBox__burden
+            .exhibit__main__itemProfile__inputForm__delivery__formBox__burden__select
+              .notation
+                売却価格
+            = f.text_field :sell, class: "exhibitInput"
+          .exhibit__main__itemProfile__inputForm__delivery__formBox__burden
+            .exhibit__main__itemProfile__inputForm__delivery__formBox__burden__select
+              .notation
+                家賃収入
+            = f.text_field :b_income, class: "exhibitInput"
+          .exhibit__main__itemProfile__inputForm__delivery__formBox__area
+            .exhibit__main__itemProfile__inputForm__delivery__formBox__area__select
+              .notation
+                測量費用
+            = f.text_field :surveying_cost, class: "exhibitInput"
+          .exhibit__main__itemProfile__inputForm__delivery__formBox__days
+            .exhibit__main__itemProfile__inputForm__delivery__formBox__days__select
+              .notation
+                仲介手数料（売却時）
+            = f.text_field :sell_brokerage_fee, class: "exhibitInput"
+          .exhibit__main__itemProfile__inputForm__delivery__formBox__days
+            .exhibit__main__itemProfile__inputForm__delivery__formBox__days__select
+              .notation
+                その他経費
+            = f.text_field :other_cost, class: "exhibitInput"
+          .exhibit__main__itemProfile__inputForm__warning
+      = f.submit :登録する ,class: "exhibitSubmit1"
+      = link_to "/", class: "exhibitSubmit2" do
+        もどる

@@ -1,0 +1,265 @@
+.wrapper
+  .header
+    .header__box
+      .header__box__title
+      %font{:face => "arial black"}
+        = link_to "ZAIKO","/", class: "broccoli"
+        
+.main-blok
+  .title-class
+    %table.title-class__name{:border => "1"}
+      %tr
+        %th.item-name 物件名
+        %td.item-name
+          = @post.name
+  .main-blok__content
+    .main-blok__content__left
+      %table.title-class__left{:border => "1"}
+        %tr
+          %th 購入日（決済日）
+          %td
+            = @post.buy_year
+            年
+            = @post.buy_month
+            月
+            = @post.buy_day
+            日
+        %tr
+          %th 物件の説明（取得経緯など）
+          %td.text-content
+            = @post.explanation
+        %tr
+          %th 購入金額
+          %td
+            = convertToJPY(@post.buy)
+            円
+        %tr
+          %th 仲介手数料（購入時）
+          %td
+            = convertToJPY(@post.buy_brokerage_fee)
+            円
+        %tr
+          %th 登記費用
+          %td 
+            = convertToJPY(@post.registration_fee)
+            円
+        %tr
+          %th 不動産取得税
+          %td 
+            = convertToJPY(@post.real_estate_acquisition_tax)
+            円
+        %tr
+          %th 固定資産税
+          %td 
+            - property_tax = @post.property_tax / 365 * @sa.to_i
+            = convertToJPY(property_tax)
+            円
+        %tr
+          %th 印紙代（購入時）
+          %td 
+            = convertToJPY(@post.buy_stamp_cost)
+            円
+        %tr
+          %th 管理費（マンション）
+          %td 
+            - if @post.m_management_fee != nil
+              - m_management_fee = @post.m_management_fee * 12 / 365 * @sa.to_i
+              = convertToJPY(m_management_fee)
+              円
+            - else
+              = 0
+              円
+        %tr
+          %th 修繕積立金（マンション）
+          %td 
+            - if @post.m_management_fee != nil
+              - m_repair_fund = @post.m_repair_fund * 12 / 365 * @sa.to_i
+              = convertToJPY(m_repair_fund)
+              円
+            - else
+              = 0
+              円
+        %tr
+          %th 修繕費
+          %td 
+            = convertToJPY(@post.repair_cost)
+            円
+        %tr
+          %th 金利
+          %td 
+            - interest_rate = @post.interest_rate * 12 / 365 * @sa.to_i
+            = convertToJPY(interest_rate)
+            円
+        %tr
+          %th 入居付け
+          %td 
+            = convertToJPY(@post.rent_cost)
+            円
+        %tr
+          %th 銀行事務手数料
+          %td 
+            = convertToJPY(@post.banking_fee)
+            円
+        %tr
+          %th 管理費
+          %td 
+            - management_fee = @post.management_fee * 12 / 365 * @sa.to_i
+            = convertToJPY(management_fee)
+            円
+        %tr
+          %th 火災保険
+          %td 
+            = convertToJPY(@post.fire_insurance)
+            円
+        %tr
+          %th 測量費用
+          %td 
+            = convertToJPY(@post.surveying_cost)
+            円
+        %tr
+          %th その他経費
+          %td 
+            = convertToJPY(@post.other_cost)
+            円
+        %tr
+          %th 総原価
+          %td
+            - total_costs = @post.buy + @post.buy_brokerage_fee + @post.registration_fee + @post.real_estate_acquisition_tax + @post.property_tax + @post.buy_stamp_cost + @post.repair_cost + interest_rate + @post.rent_cost + @post.banking_fee + management_fee.to_i + @post.fire_insurance + @post.surveying_cost + @post.other_cost + m_management_fee.to_i + m_repair_fund.to_i
+            = convertToJPY(total_costs)
+            円
+            -# = convertToJPY(@post.total_costs)
+        %tr
+          %th 売却益
+          %td 
+            - profit = @post.sell - total_costs - @post.sell_brokerage_fee
+            = convertToJPY(profit)
+            円
+    .main-blok__content__right
+      %table.title-class__right{:border => "1"}
+        %tr
+          %th 売却日（決済日）
+          %td
+            = @post.sell_year
+            年
+            = @post.sell_month
+            月
+            = @post.sell_day
+            日
+        %tr
+          %th 売却金額
+          %td
+            = convertToJPY(@post.sell)
+            円
+        %tr
+          %th 仲介手数料（売却時）
+          %td
+            = convertToJPY(@post.sell_brokerage_fee)
+            円
+        %tr
+          %th 印紙代（売却時）
+          %td
+            = @post.sell_stamp_cost
+            円
+        %tr
+          %th 売上
+          %td
+            = convertToJPY(@post.sell)
+            円
+        %tr
+          %th 保有期間
+          %td
+            = @sa
+            日
+      
+      .residents
+        %h4 ＜入居者一覧＞
+        - if @residents
+          - @residents.each do |resident|
+            .main-blok
+              .title-class
+              %table.title-class__left{:border => "1"}
+                %tr
+                  %th 入居者名
+                  %td 
+                    = resident.name
+                %tr
+                  %th 起算日
+                  %td
+                    - day = Date.new(resident.rent_y, resident.rent_m ,resident.rent_d)
+                    - str = day.strftime("%Y年 %m月%d日")
+                    = str
+                %tr
+                  %th 締め日
+                  %td
+                    - if resident.move_y || resident.move_m || resident.move_d != nil
+                      - day = Date.new(resident.move_y, resident.move_m ,resident.move_d)
+                      - str = day.strftime("%Y年 %m月%d日")
+                      = str
+                    - elsif @post.sell_year || @post.sell_month || @post.sell_day != nil
+                      - day = Date.new(@post.sell_year, @post.sell_month ,@post.sell_day)
+                      - str = day.strftime("%Y年 %m月%d日")
+                      = str
+                    - else
+                      - day = Date.today
+                      - str = day.strftime("%Y年 %m月%d日")
+                      = str
+                      
+                      
+                %tr
+                  %th 家賃
+                  %td
+                    = convertToJPY(resident.income)
+                    円
+                %tr
+                  %th #{resident.name}から頂いた総家賃
+                  %td
+                    - if resident.move_y || resident.move_m || resident.move_d != nil
+                      - d1 = Date.new(resident.rent_y, resident.rent_m ,resident.rent_d)
+                      - d2 = Date.new(resident.move_y, resident.move_m ,resident.move_d)
+                      - sa = d2 - d1
+                      - income = resident.income * 12 / 365 * sa.to_i
+                      = convertToJPY(income)
+                      円
+                    - else
+                      - d1 = Date.new(resident.rent_y, resident.rent_m ,resident.rent_d)
+                      - d2 = Date.today
+                      - sa = d2 - d1
+                      - income = resident.income * 12 / 365 * sa.to_i
+                      = convertToJPY(income)
+                      円
+                      
+
+.show-submit-btn
+  = link_to "編集", "/posts/#{@post.id}/edit", class: "submit-btn-edit"
+  = link_to "削除", "/posts/#{@post.id}", class: "submit-btn-delete",method: :delete
+.footer
+  %ul.footer__contents
+    %li.footer__contents__content
+      .footer__contents__content__name
+        ZAIKOについて
+      = link_to "#", class:"kaisya" do
+        会社概要
+      = link_to "#", class:"privacy" do
+        プライバシーポリシー
+      = link_to "#", class:"kiyaku" do
+        利用規約
+    %li.footer__contents__content
+      .footer__contents__content__name
+        自社物件を見る
+      = link_to "#", class:"category" do
+        カテゴリー一覧
+      = link_to "#", class:"bland" do
+        ブランド一覧
+    %li.footer__contents__content
+      .footer__contents__content__name
+        ヘルプ&ガイド
+      = link_to "#", class:"guide" do
+        ガイド
+      = link_to "#", class:"guideline" do
+        ガイドライン
+      = link_to "#", class:"info" do
+        お知らせ
+  -# =image_tag asset_path("logo-white.png"), class: "footer__logo"
+  .copyright
+    © ZAIKO
+

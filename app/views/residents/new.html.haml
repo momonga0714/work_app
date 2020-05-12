@@ -1,0 +1,63 @@
+= form_with( model: @resident, url: residents_path,local: true) do |f|
+  .exhibit__main__itemProfile__inputForm__sellGoods
+    .exhibit__main__itemProfile__inputForm__sellGoods__name
+      .notation
+        入居者名
+    = f.text_field :name, class: "exhibitInput"
+  .input__rentday__select
+    .input__rentday__select__year 
+      入居開始日（起算日）
+      = f.select :rent_y, {}, {prompt: "--"}, class: "rent_year", id: "input_error__rent_year", autofocus: true do
+        - array = []
+        - array[0] = ""
+        - for i in 1..150 do array[i] = 2021-i end
+        = options_for_select(array)
+      %span
+        年
+      = f.select :rent_m, {}, {prompt: "--"}, class: "rent_month", id: "input_error__rent_month", autofocus: true do
+        - array = []
+        - array[0] = ""
+        - for i in 1..12 do array[i] = 0+i end
+        = options_for_select(array)
+      %span
+        月
+      = f.select :rent_d, {}, {prompt: "--"}, class: "rent_day", id: "input_error__rent_day", autofocus: true do
+        - array = []
+        - array[0] = ""
+        - for i in 1..31 do array[i] = 0+i end
+        = options_for_select(array)
+      %span
+        日
+  .input__rentday__select
+    .input__rentday__select__year 
+      退去日または締め日　
+      = f.select :move_y, {}, {prompt: "--"}, class: "move_year", id: "input_error__move_year", autofocus: true do
+        - array = []
+        - array[0] = ""
+        - for i in 1..150 do array[i] = 2021-i end
+        = options_for_select(array)
+      %span
+        年
+      = f.select :move_m, {}, {prompt: "--"}, class: "move_month", id: "input_error__move_month", autofocus: true do
+        - array = []
+        - array[0] = ""
+        - for i in 1..12 do array[i] = 0+i end
+        = options_for_select(array)
+      %span
+        月
+      = f.select :move_d, {}, {prompt: "--"}, class: "move_day", id: "input_error__move_day", autofocus: true do
+        - array = []
+        - array[0] = ""
+        - for i in 1..31 do array[i] = 0+i end
+        = options_for_select(array)
+      %span
+        日
+  .exhibit__main__itemProfile__inputForm__delivery__formBox__burden
+    .exhibit__main__itemProfile__inputForm__delivery__formBox__burden__select
+      .notation
+        家賃収入(1ヶ月あたり)
+    = f.text_field :income, class: "exhibitInput"
+    = f.collection_select :post_id, Post.all, :id, :name, { prompt: "選択してください" }, class: "exhibitInput"
+  = f.submit :登録する ,class: "exhibitSubmit1"
+  = link_to "/", class: "exhibitSubmit2" do
+    もどる

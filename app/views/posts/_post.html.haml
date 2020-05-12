@@ -1,0 +1,9 @@
+- if  user_signed_in?
+  .pickup-container__product-box__product-lists__product-list
+    = link_to "/posts/#{post.id}", data:{"turbolinks" => false}, class: "line" do
+      .items-box_photo
+      .body
+        .body__name
+          = post.name
+        %ul.body__details
+          %li.body__details__price

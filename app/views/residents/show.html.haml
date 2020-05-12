@@ -1,0 +1,97 @@
+.wrapper
+  .header
+    .header__box
+      .header__box__title
+      %font{:face => "arial black"}
+        = link_to "ZAIKO","/", class: "broccoli"
+        
+.main-blok
+  .title-class
+  %table.title-class__left{:border => "1"}
+    %tr
+      %th 物件名
+      %td 
+        = @resident.post.name
+    %tr
+      %th 入居者情報
+      %td 
+        = @resident.name
+    %tr
+      %th 起算日
+      %td
+        = @resident.rent_y
+        年
+        = @resident.rent_m
+        月
+        = @resident.rent_d
+        日
+    %tr
+      %th 締め日
+      %td
+        - if @resident.move_y || @resident.move_m || @resident.move_d != nil
+          = @resident.move_y
+          年
+          = @resident.move_m
+          月
+          = @resident.move_d
+          日
+        - else
+          - day = Date.today
+          - str = day.strftime("%Y年 %m月%d日")
+          = str
+    %tr
+      %th 家賃
+      %td
+        = convertToJPY(@resident.income)
+        円
+    %tr
+      %th #{@resident.name}から頂いた総家賃
+      %td
+        - if @resident.move_y || @resident.move_m || @resident.move_d != nil
+          - d1 = Date.new(@resident.rent_y, @resident.rent_m ,@resident.rent_d)
+          - d2 = Date.new(@resident.move_y, @resident.move_m ,@resident.move_d)
+          - sa = d2 - d1
+          - income = @resident.income * 12 / 365 * sa.to_i
+          = convertToJPY(income)
+        - else
+          - d1 = Date.new(@resident.rent_y, @resident.rent_m ,@resident.rent_d)
+          - d2 = Date.today
+          - sa = d2 - d1
+          - income = @resident.income * 12 / 365 * sa.to_i
+          = convertToJPY(income)
+        円
+
+.show-submit-btn
+  = link_to "編集", "/residents/#{@resident.id}/edit", class: "submit-btn-edit"
+  = link_to "削除", "/residents/#{@resident.id}", class: "submit-btn-delete",method: :delete
+.footer
+  %ul.footer__contents
+    %li.footer__contents__content
+      .footer__contents__content__name
+        ZAIKOについて
+      = link_to "#", class:"kaisya" do
+        会社概要
+      = link_to "#", class:"privacy" do
+        プライバシーポリシー
+      = link_to "#", class:"kiyaku" do
+        利用規約
+    %li.footer__contents__content
+      .footer__contents__content__name
+        自社物件を見る
+      = link_to "#", class:"category" do
+        カテゴリー一覧
+      = link_to "#", class:"bland" do
+        ブランド一覧
+    %li.footer__contents__content
+      .footer__contents__content__name
+        ヘルプ&ガイド
+      = link_to "#", class:"guide" do
+        ガイド
+      = link_to "#", class:"guideline" do
+        ガイドライン
+      = link_to "#", class:"info" do
+        お知らせ
+  -# =image_tag asset_path("logo-white.png"), class: "footer__logo"
+  .copyright
+    © ZAIKO
+  
