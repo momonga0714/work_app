@@ -20,9 +20,15 @@ class PostsController < ApplicationController
 
   def show
     if @post.buy_year || @post.buy_month || @post.buy_day != nil
-      d1 = Date.new(@post.buy_year, @post.buy_month ,@post.buy_day)
-      d2 = Date.new(@post.sell_year, @post.sell_month ,@post.sell_day)
-      @sa = d2 - d1
+      if @post.sell_year || @post.sell_month || @post.sell_day != nil
+        d1 = Date.new(@post.buy_year, @post.buy_month ,@post.buy_day)
+        d2 = Date.new(@post.sell_year, @post.sell_month ,@post.sell_day)
+        @sa = d2 - d1
+      else
+        d1 = Date.new(@post.buy_year, @post.buy_month ,@post.buy_day)
+        d2 = Date.today
+        @sa = d2 - d1
+      end
     else
       @sa = 0
     end

@@ -131,9 +131,13 @@
         %tr
           %th 売却益
           %td 
-            - profit = @post.sell - total_costs - @post.sell_brokerage_fee
-            = convertToJPY(profit)
-            円
+            - if @post.sell_year || @post.sell_month || @post.sell_day != nil
+              - profit = @post.sell - total_costs - @post.sell_brokerage_fee
+              = convertToJPY(profit)
+              円
+            - else
+              = "まだ保有しているため算出できません"
+            
     .main-blok__content__right
       %table.title-class__right{:border => "1"}
         %tr
