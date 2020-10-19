@@ -19,22 +19,22 @@
             = f.select :buy_year, {}, {prompt: "--"}, class: "birth_year", id: "input_error__birth_year", autofocus: true do
               - array = []
               - array[0] = ""
-              - for i in 1..150 do array[i] = 2021-i end
-              = options_for_select(array)
+              - for i in 1..70 do array[i] = 2050-i end
+              = options_for_select(array,@post.buy_year)
             %span
               年
             = f.select :buy_month, {}, {prompt: "--"}, class: "birth_month", id: "input_error__birth_month", autofocus: true do
               - array = []
               - array[0] = ""
               - for i in 1..12 do array[i] = 0+i end
-              = options_for_select(array)
+              = options_for_select(array,@post.buy_month)
             %span
               月
             = f.select :buy_day, {}, {prompt: "--"}, class: "birth_day", id: "input_error__birth_day", autofocus: true do
               - array = []
               - array[0] = ""
               - for i in 1..31 do array[i] = 0+i end
-              = options_for_select(array)
+              = options_for_select(array,@post.buy_day)
             %span
               日
         .input__birthday__select
@@ -44,21 +44,21 @@
               - array = []
               - array[0] = ""
               - for i in 1..150 do array[i] = 2021-i end
-              = options_for_select(array)
+              = options_for_select(array,@post.sell_year)
             %span
               年
             = f.select :sell_month, {}, {prompt: "--"}, class: "birth_month", id: "input_error__birth_month", autofocus: true do
               - array = []
               - array[0] = ""
               - for i in 1..12 do array[i] = 0+i end
-              = options_for_select(array)
+              = options_for_select(array,@post.sell_month)
             %span
               月
             = f.select :sell_day, {}, {prompt: "--"}, class: "birth_day", id: "input_error__birth_day", autofocus: true do
               - array = []
               - array[0] = ""
               - for i in 1..31 do array[i] = 0+i end
-              = options_for_select(array)
+              = options_for_select(array,@post.sell_day)
             %span
               日
         
