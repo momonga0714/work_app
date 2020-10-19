@@ -19,7 +19,7 @@
             = f.select :buy_year, {}, {prompt: "--"}, class: "birth_year", id: "input_error__birth_year", autofocus: true do
               - array = []
               - array[0] = ""
-              - for i in 1..150 do array[i] = 2021-i end
+              - for i in 1..70 do array[i] = 2050-i end
               = options_for_select(array)
             %span
               年
