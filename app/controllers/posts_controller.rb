@@ -47,6 +47,10 @@ class PostsController < ApplicationController
       @sa_rent_net = 0
     end
 
+    if @post == nil
+      @post = 0
+    end
+
     # if d4 == d2
     #   @total_b_income = @post.b_income * 12 / 365 * @sa_rent.to_i
     #   @total_sales = @post.sell + @total_b_income

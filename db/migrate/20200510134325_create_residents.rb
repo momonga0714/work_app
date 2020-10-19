@@ -2,7 +2,7 @@ class CreateResidents < ActiveRecord::Migration[5.2]
   def change
     create_table :residents do |t|
       t.string :name
-      t.integer :income
+      t.integer :income,default: 0
       t.integer :rent_y
       t.integer :rent_m
       t.integer :rent_d
