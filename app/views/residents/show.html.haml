@@ -19,21 +19,21 @@
     %tr
       %th 起算日
       %td
-        = @resident.rent_y
+        = @rent_y
         年
-        = @resident.rent_m
+        = @rent_m
         月
-        = @resident.rent_d
+        = @rent_d
         日
     %tr
       %th 締め日
       %td
-        - if @resident.move_y || @resident.move_m || @resident.move_d != nil
-          = @resident.move_y
+        - if @move_y || @move_m || @move_d != nil
+          = @move_y
           年
-          = @resident.move_m
+          = @move_m
           月
-          = @resident.move_d
+          = @move_d
           日
         - else
           - day = Date.today
@@ -47,22 +47,11 @@
     %tr
       %th #{@resident.name}から頂いた総家賃
       %td
-        - if @resident.move_y || @resident.move_m || @resident.move_d != nil
-          - d1 = Date.new(@resident.rent_y, @resident.rent_m ,@resident.rent_d)
-          - d2 = Date.new(@resident.move_y, @resident.move_m ,@resident.move_d)
-          - sa = d2 - d1
-          - income = @resident.income * 12 / 365 * sa.to_i
-          = convertToJPY(income)
-        - else
-          - d1 = Date.new(@resident.rent_y, @resident.rent_m ,@resident.rent_d)
-          - d2 = Date.today
-          - sa = d2 - d1
-          - income = @resident.income * 12 / 365 * sa.to_i
-          = convertToJPY(income)
+        = convertToJPY(@income)
         円
 
 .show-submit-btn
-  = link_to "編集", "/residents/#{@resident.id}/edit", class: "submit-btn-edit"
+  = link_to "編集", edit_resident_path(@resident.id), class: "submit-btn-edit",method: :get
   = link_to "削除", "/residents/#{@resident.id}", class: "submit-btn-delete",method: :delete
 .footer
   %ul.footer__contents

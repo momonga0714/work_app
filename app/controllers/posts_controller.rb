@@ -15,7 +15,7 @@ class PostsController < ApplicationController
     @post = Post.new(post_params)
     @post.user_id = current_user.id
     if @post.save
-      redirect_to "/"
+      redirect_to post_path(@post.id)
     else
       render :new
     end
@@ -76,36 +76,50 @@ class PostsController < ApplicationController
       else
         @registration_fee = 0
       end
+    
     # 「固定資産税評価額相当額」計算式
-      @temporary_values = (@post.buy * 0.8).floor
-    # 「固定資産税」計算式
       if @post.values != 0
-        @property_tax = (@post.values*0.8*0.017).floor / 365 * @sa.to_i
+        @temporary_values = @post.values
       else
-        @property_tax = (@temporary_values*0.017).floor / 365 * @sa.to_i
+        @temporary_values = (@post.buy * 0.8).floor
       end
+
+    # 「不動産取得税」計算式
+      @acquisition_tax = (@temporary_values*0.014).floor
+
+    # 「固定資産税」計算式
+      @property_tax = (@temporary_values*0.8*0.017).floor / 365 * @sa.to_i
+
     # 管理費（マンション）
       @m_management_fee = @post.m_management_fee * 12 / 365 * @sa.to_i
+
     # 積立金（マンション）
       @m_repair_fund = @post.m_repair_fund * 12 / 365 * @sa.to_i
+
     # １日あたり金利計算
       @interest_rate = @post.interest_rate * 12 / 365 * @sa.to_i
+
     # 物件運営管理費（集金代行など費用について）
       @management_fee = @post.management_fee * 12 / 365 * @sa.to_i
-    # 総費用
-      @total_costs = @post.buy + @post.buy_brokerage_fee + @post.registration_fee + @post.real_estate_acquisition_tax + @post.property_tax + @post.buy_stamp_cost + @post.repair_cost + @interest_rate + @post.rent_cost + @post.banking_fee + @management_fee.to_i + @post.fire_insurance + @post.surveying_cost + @post.other_cost + @m_management_fee.to_i + @m_repair_fund.to_i
-    # 売却益
-        if @post.sell_year || @post.sell_month || @post.sell_day != nil
-          @profit = @post.sell - @total_costs - @post.sell_brokerage_fee
-        else
-          @profit = 0
-        end
+
     # 仲介手数料（売却時）
       if @post.sell != 0
         @brokerage_fee_sell = ((@post.sell*0.03+60000)*1.1).floor
       else
         @brokerage_fee_sell = 0
       end
+    # 総費用
+      @total_costs = @post.buy + @brokerage_fee_buy + @registration_fee + @acquisition_tax + @property_tax + @post.buy_stamp_cost + @m_management_fee + @m_repair_fund + @post.repair_cost + @interest_rate + @post.rent_cost + @post.banking_fee + @management_fee + @post.fire_insurance + @post.surveying_cost + @post.other_cost + @brokerage_fee_sell
+    # 売却益
+    if @post.sell_year || @post.sell_month || @post.sell_day != nil
+      @profit = @post.sell - @total_costs - @brokerage_fee_sell
+    else
+      @profit = 0
+    end
+    
+    # 入居者賃料計算
+      @date_sell = Date.new(@post.sell_year, @post.sell_month ,@post.sell_day)
+      @date_buy = Date.new(@post.buy_year, @post.buy_month ,@post.buy_day)
   end
 
   def edit
@@ -114,7 +128,7 @@ class PostsController < ApplicationController
 
   def update
     @post.update(post_params)
-    redirect_to "/"
+    redirect_to post_path(@post.id)
   end
 
   def destroy
@@ -128,7 +142,7 @@ class PostsController < ApplicationController
 
   private
     def post_params
-      params.require(:post).permit(:name,:explanation,:buy,:buy_brokerage_fee,:registration_fee,:real_estate_acquisition_tax,:property_tax,:buy_stamp_cost,:repair_cost,:interest_rate,:rent_cost,:banking_fee,:management_fee,:fire_insurance,:sell,:surveying_cost,:sell_brokerage_fee,:sell_stamp_cost,:buy_year,:buy_month,:buy_day,:sell_year,:sell_month,:sell_day,:debt,:net_worth,:cash_flow,:ownership_period,:house_layout,:m2,:b_income,:other_cost,:m_management_fee,:m_repair_fund,:rent_year,:rent_month,:rent_day,:move_year,:move_month,:move_day)
+      params.require(:post).permit(:name,:buy,:buy_stamp_cost,:repair_cost,:interest_rate,:rent_cost,:banking_fee,:management_fee,:fire_insurance,:sell,:surveying_cost,:sell_stamp_cost,:buy_year,:buy_month,:buy_day,:sell_year,:sell_month,:sell_day,:debt,:net_worth,:cash_flow,:ownership_period,:house_layout,:m2,:b_income,:other_cost,:m_management_fee,:m_repair_fund,:rent_year,:rent_month,:rent_day,:move_year,:move_month,:move_day,:values)
     end
 
     def set_post

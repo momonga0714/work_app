@@ -15,10 +15,6 @@ ActiveRecord::Schema.define(version: 2020_10_20_004256) do
   create_table "posts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.integer "buy", default: 0, null: false
-    t.integer "buy_brokerage_fee", default: 0, null: false
-    t.integer "registration_fee", default: 0, null: false
-    t.integer "real_estate_acquisition_tax", default: 0, null: false
-    t.integer "property_tax", default: 0, null: false
     t.integer "buy_stamp_cost", default: 0, null: false
     t.integer "repair_cost", default: 0, null: false
     t.integer "interest_rate", default: 0, null: false
@@ -28,7 +24,6 @@ ActiveRecord::Schema.define(version: 2020_10_20_004256) do
     t.integer "fire_insurance", default: 0, null: false
     t.integer "sell", default: 0, null: false
     t.integer "surveying_cost", default: 0, null: false
-    t.integer "sell_brokerage_fee", default: 0, null: false
     t.integer "sell_stamp_cost", default: 0, null: false
     t.integer "buy_year"
     t.integer "buy_month"

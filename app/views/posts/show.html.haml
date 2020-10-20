@@ -36,12 +36,8 @@
         %tr
           %th 固定資産税評価額(※1)
           %td
-            - if @post.values != 0
-              = convertToJPY(@post.values)
-              円
-            - else
-              = convertToJPY(@temporary_values)
-              円
+            = convertToJPY(@temporary_values)
+            円
         %tr
           %th 仲介手数料（購入時）
           %td
@@ -55,17 +51,13 @@
         %tr
           %th 不動産取得税　　(※3)
           %td 
-            = convertToJPY((@temporary_values*0.014).floor)
+            = convertToJPY(@acquisition_tax)
             円
         %tr
           %th 固定資産税　　　(※4)
           %td 
-            - if @post.values != 0
-              = convertToJPY(@property_tax)
-              円
-            - else
-              = convertToJPY(@property_tax)
-              円
+            = convertToJPY(@property_tax)
+            円
         %tr
           %th 印紙代（購入時）
           %td 
@@ -189,9 +181,18 @@
                 %tr
                   %th 起算日
                   %td
-                    - day = Date.new(resident.rent_y, resident.rent_m ,resident.rent_d)
-                    - str = day.strftime("%Y年 %m月%d日")
-                    = str
+                    - if resident.rent_y || resident.rent_m || resident.rent_d != nil
+                      - day = Date.new(resident.rent_y, resident.rent_m ,resident.rent_d)
+                      - str = day.strftime("%Y年 %m月%d日")
+                      = str
+                    - elsif @post.buy_year || @post.buy_month || @post.buy_day != nil
+                      - day = Date.new(@post.buy_year, @post.buy_month ,@post.buy_day)
+                      - str = day.strftime("%Y年 %m月%d日")
+                      = str
+                    - else
+                      - day = Date.today
+                      - str = day.strftime("%Y年 %m月%d日")
+                      = str
                 %tr
                   %th 締め日
                   %td
@@ -207,8 +208,6 @@
                       - day = Date.today
                       - str = day.strftime("%Y年 %m月%d日")
                       = str
-                      
-                      
                 %tr
                   %th 家賃
                   %td
@@ -217,21 +216,30 @@
                 %tr
                   %th #{resident.name}から頂いた総家賃
                   %td
-                    - if resident.move_y || resident.move_m || resident.move_d != nil
-                      - d1 = Date.new(resident.rent_y, resident.rent_m ,resident.rent_d)
-                      - d2 = Date.new(resident.move_y, resident.move_m ,resident.move_d)
-                      - sa = d2 - d1
-                      - income = resident.income * 12 / 365 * sa.to_i
-                      = convertToJPY(income)
-                      円
-                    - else
-                      - d1 = Date.new(resident.rent_y, resident.rent_m ,resident.rent_d)
-                      - d2 = Date.today
-                      - sa = d2 - d1
-                      - income = resident.income * 12 / 365 * sa.to_i
-                      = convertToJPY(income)
-                      円
-                      
+                    -if  resident.rent_y != nil && resident.move_y != nil
+                      -d1 = Date.new(resident.rent_y, resident.rent_m ,resident.rent_d)
+                      -d2 = Date.new(resident.move_y, resident.move_m ,resident.move_d)
+                      -sa = d2 - d1
+                      -@income = resident.income * 12 / 365 * sa.to_i
+                    -elsif resident.rent_y != nil && resident.move_y == nil
+                      -d1 = Date.new(resident.rent_y, resident.rent_m ,resident.rent_d)
+                      -d2 = @date_sell
+                      -sa = d2 - d1
+                      -@income = resident.income * 12 / 365 * sa.to_i
+                    -elsif resident.rent_y == nil && resident.move_y != nil
+                      -d1 = @date_buy
+                      -d2 = Date.new(resident.move_y, resident.move_m ,resident.move_d)
+                      -sa = d2 - d1
+                      -@income = resident.income * 12 / 365 * sa.to_i
+                    -elsif resident.rent_y == nil && resident.move_y == nil
+                      -d1 = @date_buy
+                      -d2 = @date_sell
+                      -sa = d2 - d1
+                      -@income = resident.income * 12 / 365 * sa.to_i
+                    -else
+                      - @income = 0
+                    = convertToJPY(@income)
+                    円
 
 .show-submit-btn
   = link_to "編集", "/posts/#{@post.id}/edit", class: "submit-btn-edit"

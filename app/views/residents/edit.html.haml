@@ -10,22 +10,22 @@
       = f.select :rent_y, {}, {prompt: "--"}, class: "rent_year", id: "input_error__rent_year", autofocus: true do
         - array = []
         - array[0] = ""
-        - for i in 1..150 do array[i] = 2021-i end
-        = options_for_select(array)
+        - for i in 1..70 do array[i] = 2050-i end
+        = options_for_select(array,@rent_y)
       %span
         年
       = f.select :rent_m, {}, {prompt: "--"}, class: "rent_month", id: "input_error__rent_month", autofocus: true do
         - array = []
         - array[0] = ""
         - for i in 1..12 do array[i] = 0+i end
-        = options_for_select(array)
+        = options_for_select(array,@rent_m)
       %span
         月
       = f.select :rent_d, {}, {prompt: "--"}, class: "rent_day", id: "input_error__rent_day", autofocus: true do
         - array = []
         - array[0] = ""
         - for i in 1..31 do array[i] = 0+i end
-        = options_for_select(array)
+        = options_for_select(array,@rent_d)
       %span
         日
   .input__rentday__select
@@ -34,22 +34,22 @@
       = f.select :move_y, {}, {prompt: "--"}, class: "move_year", id: "input_error__move_year", autofocus: true do
         - array = []
         - array[0] = ""
-        - for i in 1..150 do array[i] = 2021-i end
-        = options_for_select(array)
+        - for i in 1..70 do array[i] = 2050-i end
+        = options_for_select(array,@move_y)
       %span
         年
       = f.select :move_m, {}, {prompt: "--"}, class: "move_month", id: "input_error__move_month", autofocus: true do
         - array = []
         - array[0] = ""
         - for i in 1..12 do array[i] = 0+i end
-        = options_for_select(array)
+        = options_for_select(array,@move_m)
       %span
         月
       = f.select :move_d, {}, {prompt: "--"}, class: "move_day", id: "input_error__move_day", autofocus: true do
         - array = []
         - array[0] = ""
         - for i in 1..31 do array[i] = 0+i end
-        = options_for_select(array)
+        = options_for_select(array,@move_d)
       %span
         日
   .exhibit__main__itemProfile__inputForm__delivery__formBox__burden
