@@ -34,26 +34,38 @@
             = convertToJPY(@post.buy)
             円
         %tr
+          %th 固定資産税評価額(※1)
+          %td
+            - if @post.values != 0
+              = convertToJPY(@post.values)
+              円
+            - else
+              = convertToJPY(@temporary_values)
+              円
+        %tr
           %th 仲介手数料（購入時）
           %td
-            = convertToJPY(@post.buy_brokerage_fee)
+            = convertToJPY(@brokerage_fee_buy)
             円
         %tr
-          %th 登記費用
+          %th 登記費用　　　　(※2)
           %td 
-            = convertToJPY(@post.registration_fee)
+            = convertToJPY(@registration_fee)
             円
         %tr
-          %th 不動産取得税
+          %th 不動産取得税　　(※3)
           %td 
-            = convertToJPY(@post.real_estate_acquisition_tax)
+            = convertToJPY((@temporary_values*0.014).floor)
             円
         %tr
-          %th 固定資産税
+          %th 固定資産税　　　(※4)
           %td 
-            - property_tax = @post.property_tax / 365 * @sa.to_i
-            = convertToJPY(property_tax)
-            円
+            - if @post.values != 0
+              = convertToJPY(@property_tax)
+              円
+            - else
+              = convertToJPY(@property_tax)
+              円
         %tr
           %th 印紙代（購入時）
           %td 
@@ -62,23 +74,13 @@
         %tr
           %th 管理費（マンション）
           %td 
-            - if @post.m_management_fee != nil
-              - m_management_fee = @post.m_management_fee * 12 / 365 * @sa.to_i
-              = convertToJPY(m_management_fee)
-              円
-            - else
-              = 0
-              円
+            = convertToJPY(@m_management_fee)
+            円
         %tr
           %th 修繕積立金（マンション）
           %td 
-            - if @post.m_management_fee != nil
-              - m_repair_fund = @post.m_repair_fund * 12 / 365 * @sa.to_i
-              = convertToJPY(m_repair_fund)
-              円
-            - else
-              = 0
-              円
+            = convertToJPY(@m_repair_fund)
+            円
         %tr
           %th 修繕費
           %td 
@@ -87,8 +89,7 @@
         %tr
           %th 金利
           %td 
-            - interest_rate = @post.interest_rate * 12 / 365 * @sa.to_i
-            = convertToJPY(interest_rate)
+            = convertToJPY(@interest_rate)
             円
         %tr
           %th 入居付け
@@ -103,8 +104,7 @@
         %tr
           %th 管理費
           %td 
-            - management_fee = @post.management_fee * 12 / 365 * @sa.to_i
-            = convertToJPY(management_fee)
+            = convertToJPY(@management_fee)
             円
         %tr
           %th 火災保険
@@ -124,20 +124,20 @@
         %tr
           %th 総原価
           %td
-            - total_costs = @post.buy + @post.buy_brokerage_fee + @post.registration_fee + @post.real_estate_acquisition_tax + @post.property_tax + @post.buy_stamp_cost + @post.repair_cost + interest_rate + @post.rent_cost + @post.banking_fee + management_fee.to_i + @post.fire_insurance + @post.surveying_cost + @post.other_cost + m_management_fee.to_i + m_repair_fund.to_i
-            = convertToJPY(total_costs)
+            = convertToJPY(@total_costs)
             円
-            -# = convertToJPY(@post.total_costs)
         %tr
           %th 売却益
           %td 
-            - if @post.sell_year || @post.sell_month || @post.sell_day != nil
-              - profit = @post.sell - total_costs - @post.sell_brokerage_fee
-              = convertToJPY(profit)
-              円
-            - else
-              = "保有中のため算出できません"
-            
+            = convertToJPY(@profit)
+            円
+      (※１　入力がない場合は購入価格の80%としております。)
+      %br 
+      (※２　固定資産税評価額×2%+5万円(司法書士報酬)で計算。)
+      %br 
+      (※３　固定資産税評価額×1.4%で計算。)
+      %br 
+      (※４　固定資産税評価額×1.7%で計算)
     .main-blok__content__right
       %table.title-class__right{:border => "1"}
         %tr
@@ -157,7 +157,7 @@
         %tr
           %th 仲介手数料（売却時）
           %td
-            = convertToJPY(@post.sell_brokerage_fee)
+            = convertToJPY(@brokerage_fee_sell)
             円
         %tr
           %th 印紙代（売却時）

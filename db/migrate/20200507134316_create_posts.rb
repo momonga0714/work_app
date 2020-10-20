@@ -18,12 +18,12 @@ class CreatePosts < ActiveRecord::Migration[5.2]
       t.integer :surveying_cost, null: false,default: 0
       t.integer :sell_brokerage_fee, null: false,default: 0
       t.integer :sell_stamp_cost, null: false,default: 0
-      t.integer :buy_year, null: false,default: 0
-      t.integer :buy_month, null: false,default: 0
-      t.integer :buy_day, null: false,default: 0
-      t.integer :sell_year, null: false,default: 0
-      t.integer :sell_month, null: false,default: 0
-      t.integer :sell_day, null: false,default: 0
+      t.integer :buy_year
+      t.integer :buy_month
+      t.integer :buy_day
+      t.integer :sell_year
+      t.integer :sell_month
+      t.integer :sell_day
       t.integer :total_costs, null: false,default: 0
       t.integer :total_sales, null: false,default: 0
       t.integer :profit, null: false,default: 0
