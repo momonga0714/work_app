@@ -44,12 +44,6 @@ ActiveRecord::Schema.define(version: 2020_10_20_004256) do
     t.integer "other_cost", default: 0, null: false
     t.integer "m_management_fee", default: 0, null: false
     t.integer "m_repair_fund", default: 0, null: false
-    t.integer "rent_year"
-    t.integer "rent_month"
-    t.integer "rent_day"
-    t.integer "move_year"
-    t.integer "move_month"
-    t.integer "move_day"
     t.bigint "user_id"
     t.integer "values", default: 0, null: false
     t.index ["user_id"], name: "index_posts_on_user_id"
