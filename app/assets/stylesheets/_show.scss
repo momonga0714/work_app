@@ -8,12 +8,16 @@ td{
   text-align: center;
 }
 
+html{
+  background-color: #f6f6f4;
+}
 
 .wrapper{
-  background-color: #CCFFCC;
+   color:  #55c500;
+   background-color: #f6f6f4;
 }
 .broccoli{
-    color: green;
+    color:  #55c500;
     font-size: 50px;
     font-weight: bold;
     padding-left: 430px;
@@ -37,7 +41,7 @@ td{
 
 
 .main-blok{
-  background-color: #CCFFCC;
+  //  
   &__content{
     display: flex;
     padding: 0 200px;
@@ -55,7 +59,7 @@ td{
 .show-submit-btn{
   display: flex;
   padding: 100px 0 ;
-  background-color: #CCFFCC;
+   
   padding: 100px 400px;
 }
 .submit-btn-edit{
@@ -64,8 +68,8 @@ td{
     line-height: 48px;
     font-weight: bold;
     font-size: 18px;
-    background: green;
-    border: 1px solid green;
+    background:  #55c500;
+    border: 1px solid  #55c500;
     color: white;
     cursor: pointer;
     text-align: center;

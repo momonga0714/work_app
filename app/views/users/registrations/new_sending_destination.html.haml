@@ -1,0 +1,94 @@
+.wrapper
+  .signup-header
+    = link_to "#" do
+      = image_tag "material/logo/logo.png", width: 140, height: 40
+  .single-container
+    .single-main
+      .title
+        住所情報登録
+      = form_with model: @sending_destination, id: 'new_sending_destination',local: true do |f|
+        = render "devise/shared/error_messages", resource: @sending_destination
+        .main
+          .input
+            .input__name
+              .input__name__text.SideType
+                .bold
+                  送付先氏名(全角)
+                .red
+                  必須
+              .input__name__fullname
+                = f.text_field :destination_first_name, autofocus: true, placeholder: "　例）山田", class: "input__name__fullname__first_name", id: "first_name"
+                = f.text_field :destination_family_name, autofocus: true, placeholder: "　例）太郎", class: "input__name__fullname__last_name", id: "last_name"
+            .input__kana
+              .input__kana__text.SideType
+                .bold
+                  送付先氏名かな(全角)
+                .red
+                  必須
+              .input__kana__fullname
+                = f.text_field :destination_first_name_kana, autofocus: true, placeholder: "　例）やまだ", class: "input__kana__fullname__first_kana", id: "first_kana"
+                = f.text_field :destination_family_name_kana, autofocus: true, placeholder: "　例）たろう", class: "input__kana__fullname__last_kana", id: "last_kana"
+            .input__postCode
+              .input__postCode__text.SideType
+                .bold
+                  郵便番号
+                .red
+                  必須
+              = f.text_field :post_code, autofocus: true, placeholder: "　例）1112222", class: "input__postCode__form", id: "post_code"
+            .input__prefecture
+              .input__prefecture__text.SideType
+                .bold
+                  都道府県
+                .red
+                  必須
+              = f.collection_select :prefecture_id, Prefecture.all, :id, :name, { prompt: "選択してください" }, class: "input__prefecture__form", id: "prefecture"
+            .input__city
+              .input__city__text.SideType
+                .bold
+                  市町村
+                .red
+                  必須
+              = f.text_field :city, autofocus: true, placeholder: "　例）福岡市", class: "input__city__form", id: "city"
+
+            .input__houseNumber
+              .input__houseNumber__text.SideType
+                .bold
+                  番地
+                .red
+                  必須
+              = f.text_field :house_number, autofocus: true, placeholder: "　例）1-10-2", class: "input__houseNumber__form", id: "house_number"
+
+            .input__buildingName
+              .input__buildingName__text.SideType
+                .bold
+                  建物名
+                .gray
+                  任意
+              = f.text_field :building_name, autofocus: true, placeholder: "　例）マンション", class: "input__buildingName__form", id: "building_name"
+
+            .input__phoneNumber
+              .input__phoneNumber__text.SideType
+                .bold
+                  電話番号
+                .gray
+                  任意
+              = f.text_field :phone_number, autofocus: true, placeholder: "　例）09012345678", class: "input__phoneNumber__form", id: "phone_number"
+          
+            .input__submit__btn
+              = f.submit "登録する", class: "btn", id: "Addressinput__btn" 
+  .signup-footer
+    %nav.signup-footer__nav
+      %ul.signup-footer__nav__lists
+        %li.signup-footer__nav__lists__list
+          = link_to '#' do
+            プライバシーポリシー
+        %li.signup-footer__nav__lists__list
+          = link_to '#' do
+            フリマ利用規約
+        %li.signup-footer__nav__lists__list
+          = link_to '#' do
+            特定商取引に関する表記
+    = link_to "#", class: 'signup-footer__logo' do
+      = image_tag "material/logo/logo-white.png", height: '30', width: '120', class: "signup-footer__logo__tag"
+    .signup-footer__bottom
+      © FURIMA 

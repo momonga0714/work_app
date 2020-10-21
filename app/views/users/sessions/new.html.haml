@@ -1,0 +1,38 @@
+.signin-header
+  = link_to "#" do
+    = image_tag "material/logo/logo.png", width: 140, height: 40
+.signin-container
+  .signin-main
+    .registration
+      .registration__text
+        アカウントをお持ちでない方
+      .registration__btn
+        - if devise_mapping.registerable? && controller_name != 'registrations'
+          = link_to "新規登録", new_registration_path(resource_name), class: "new_registration"
+    = form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+      .main
+        .input
+          .input__email
+            = f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "　メールアドレス", class: "input__email__form", id: "email"
+          .input__password
+            = f.password_field :password, autocomplete: "current-password", placeholder: "　パスワード", class: "input__password__form", id: "password"
+          .input__submit
+            = f.submit "ログイン", class: "btn"
+            - if devise_mapping.recoverable? && controller_name != 'passwords' && controller_name != 'registrations'
+              = link_to "パスワードをお忘れの方", new_password_path(resource_name), class: "forget"
+.signin-footer
+  %nav.signup-footer__nav
+    %ul.signup-footer__nav__lists
+      %li.signup-footer__nav__lists__list
+        = link_to '#' do
+          プライバシーポリシー
+      %li.signup-footer__nav__lists__list
+        = link_to '#' do
+          フリマ利用規約
+      %li.signup-footer__nav__lists__list
+        = link_to '#' do
+          特定商取引に関する表記
+  = link_to "#", class: 'signup-footer__logo' do
+    = image_tag "material/logo/logo-white.png", height: '30', width: '120', class: "signup-footer__logo__tag"
+  .signup-footer__bottom
+    © FURIMA 
