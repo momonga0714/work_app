@@ -88,7 +88,7 @@ class PostsController < ApplicationController
       @acquisition_tax = (@temporary_values*0.014).floor
 
     # 「固定資産税」計算式
-      @property_tax = (@temporary_values*0.8*0.017).floor / 365 * @sa.to_i
+      @property_tax = ((@temporary_values*0.6*0.003) + (@temporary_values*0.4*0.014)).floor / 365 * @sa.to_i
 
     # 管理費（マンション）
       @m_management_fee = @post.m_management_fee * 12 / 365 * @sa.to_i
@@ -116,7 +116,6 @@ class PostsController < ApplicationController
     else
       @profit = 0
     end
-    
     # 入居者賃料計算
       @date_sell = Date.new(@post.sell_year, @post.sell_month ,@post.sell_day)
       @date_buy = Date.new(@post.buy_year, @post.buy_month ,@post.buy_day)
@@ -142,7 +141,7 @@ class PostsController < ApplicationController
 
   private
     def post_params
-      params.require(:post).permit(:name,:buy,:buy_stamp_cost,:repair_cost,:interest_rate,:rent_cost,:banking_fee,:management_fee,:fire_insurance,:sell,:surveying_cost,:sell_stamp_cost,:buy_year,:buy_month,:buy_day,:sell_year,:sell_month,:sell_day,:debt,:net_worth,:cash_flow,:ownership_period,:house_layout,:m2,:b_income,:other_cost,:m_management_fee,:m_repair_fund,:rent_year,:rent_month,:rent_day,:move_year,:move_month,:move_day,:values)
+      params.require(:post).permit(:name,:buy,:explanation,:buy_stamp_cost,:repair_cost,:interest_rate,:rent_cost,:banking_fee,:management_fee,:fire_insurance,:sell,:surveying_cost,:sell_stamp_cost,:buy_year,:buy_month,:buy_day,:sell_year,:sell_month,:sell_day,:debt,:net_worth,:cash_flow,:ownership_period,:house_layout,:m2,:b_income,:other_cost,:m_management_fee,:m_repair_fund,:rent_year,:rent_month,:rent_day,:move_year,:move_month,:move_day,:values)
     end
 
     def set_post
