@@ -21,38 +21,8 @@
             %td 
               = link_to "#{resident.name}","/residents/#{resident.id}"
       = link_to "入居者の登録","/residents/new"
-.pickup
-  .pickup-container
-    .pickup-container__box
-      .pickup-container__box__head
-      .pickup-container__box__lists
-.footer
-  %ul.footer__contents
-    %li.footer__contents__content
-      .footer__contents__content__name
-        ZAIKOについて
-      = link_to "#", class:"kaisya" do
-        会社概要
-      = link_to "#", class:"privacy" do
-        プライバシーポリシー
-      = link_to "#", class:"kiyaku" do
-        利用規約
-    %li.footer__contents__content
-      .footer__contents__content__name
-        自社物件を見る
-      = link_to "#", class:"category" do
-        カテゴリー一覧
-      = link_to "#", class:"bland" do
-        ブランド一覧
-    %li.footer__contents__content
-      .footer__contents__content__name
-        ヘルプ&ガイド
-      = link_to "#", class:"guide" do
-        ガイド
-      = link_to "#", class:"guideline" do
-        ガイドライン
-      = link_to "#", class:"info" do
-        お知らせ
-  -# =image_tag asset_path("logo-white.png"), class: "footer__logo"
-  .copyright
-    © ZAIKO
+  .pickup
+    .pickup-container
+      .pickup-container__box
+        .pickup-container__box__head
+        .pickup-container__box__lists
