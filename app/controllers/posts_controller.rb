@@ -1,7 +1,8 @@
 class PostsController < ApplicationController
   before_action :set_post, only: [:show,:edit,:update,:destroy,:create]
-  before_action :set_date_data, only:[:show]
+  before_action :set_date_data, only:[:show,:update]
   
+
   PER = 4
   def index
     @posts = Post.page(params[:page]).per(PER)
@@ -90,7 +91,12 @@ class PostsController < ApplicationController
         @brokerage_fee_sell = 0
       end
     # 総費用
-      @total_costs = @post.buy + @brokerage_fee_buy + @registration_fee + @acquisition_tax + @property_tax + @post.buy_stamp_cost + @m_management_fee + @m_repair_fund + @post.repair_cost + @interest_rate + @post.rent_cost + @post.banking_fee + @management_fee + @post.fire_insurance + @post.surveying_cost + @post.other_cost + @brokerage_fee_sell
+      @total_costs = @post.buy + @brokerage_fee_buy + @registration_fee + 
+                      @acquisition_tax + @property_tax + @post.buy_stamp_cost + 
+                        @m_management_fee + @m_repair_fund + @post.repair_cost + 
+                          @interest_rate + @post.rent_cost + @post.banking_fee + 
+                            @management_fee + @post.fire_insurance + @post.surveying_cost + 
+                              @post.other_cost + @brokerage_fee_sell
     # 売却益
     if @post.sell_year && @post.sell_month && @post.sell_day
       @profit = @post.sell - @total_costs - @brokerage_fee_sell
@@ -100,15 +106,71 @@ class PostsController < ApplicationController
     # 入居者賃料計算
       @date_sell =  @sell_y_m_d
       @date_buy = @buy_y_m_d
+    # 総利益（売却益＋家賃収入）
+      @residents.each do |resident|
+        @name = resident.name
+        @income = resident.income
+        if resident.rent_y && resident.rent_m && resident.rent_d  # 起算日の計算
+            day = Date.new(resident.rent_y, resident.rent_m ,resident.rent_d)
+            @str_start = day.strftime("%Y年 %m月%d日")
+        elsif @post.buy_year && @post.buy_month && @post.buy_day
+            day = Date.new(@post.buy_year, @post.buy_month ,@post.buy_day)
+            @str_start = day.strftime("%Y年 %m月%d日")
+        else
+            day = Date.today
+            @str_start = day.strftime("%Y年 %m月%d日")
+        end
+
+        if resident.move_y && resident.move_m && resident.move_d # 締め日の計算
+          day = Date.new(resident.move_y, resident.move_m ,resident.move_d)
+          @str_fin = day.strftime("%Y年 %m月%d日")
+        elsif @post.sell_year && @post.sell_month && @post.sell_day 
+          day = Date.new(@post.sell_year, @post.sell_month ,@post.sell_day)
+          @str_fin = day.strftime("%Y年 %m月%d日")
+        else
+          day = Date.today
+          @str_fin = day.strftime("%Y年 %m月%d日")
+        end
+
+        if  resident.rent_y  && resident.move_y 
+          d1 = Date.new(resident.rent_y, resident.rent_m ,resident.rent_d)
+          d2 = Date.new(resident.move_y, resident.move_m ,resident.move_d)
+          sa = d2 - d1
+          @sum_income = resident.income * 12 / 365 * sa.to_i
+        elsif resident.rent_y  && resident.move_y == nil
+          d1 = Date.new(resident.rent_y, resident.rent_m ,resident.rent_d)
+          d2 = @date_sell
+          sa = d2 - d1
+          @sum_income = resident.income * 12 / 365 * sa.to_i
+        elsif resident.rent_y == nil && resident.move_y 
+          d1 = @date_buy
+          d2 = Date.new(resident.move_y, resident.move_m ,resident.move_d)
+          sa = d2 - d1
+          @sum_income = resident.income * 12 / 365 * sa.to_i
+        elsif resident.rent_y == nil && resident.move_y == nil
+          d1 = @date_buy
+          d2 = @date_sell
+          sa = d2 - d1
+          @sum_income = resident.income * 12 / 365 * sa.to_i
+        else
+          @sum_income = 0
+          
+        end
+      end # each文のend
+
   end
 
   def edit
     
   end
 
-  def update # 売却日が購入日より前に入力できてしまうのでそれの回避を行う (ストロングパラメーターの時点で条件分岐が必要か…)
-    @post.update(post_params)
-    redirect_to post_path(@post.id)
+  def update 
+    if Date.new(post_params[:buy_year].to_i, post_params[:buy_month].to_i ,post_params[:buy_day].to_i) <= Date.new(post_params[:sell_year].to_i, post_params[:sell_month].to_i ,post_params[:sell_day].to_i)
+      @post.update(post_params)
+      redirect_to post_path(@post.id)
+    else
+      render :edit
+    end
   end
 
   def destroy
@@ -135,10 +197,12 @@ class PostsController < ApplicationController
       @post = Post.find(params[:id])
     end
 
-    def set_date_data  # ここからの値をとって条件分岐してもダメな理由はおそらく、もともと入っている値を撮ってきてしまう。新しく値をとるのであればparamsからとる必要があると結論
+    def set_date_data  
       if @post.buy_year && @post.buy_month && @post.buy_day && @post.sell_year && @post.sell_month && @post.sell_day
         @buy_y_m_d = Date.new(@post.buy_year, @post.buy_month ,@post.buy_day)
         @sell_y_m_d = Date.new(@post.sell_year, @post.sell_month ,@post.sell_day)
+        # @params_buy = Date.new(post_params[:buy_year].to_i, post_params[:buy_month].to_i ,post_params[:buy_day].to_i)
+        # @params_sell = Date.new(post_params[:sell_year].to_i, post_params[:sell_month].to_i ,post_params[:sell_day].to_i)
       else
         @buy_y_m_d = Date.today
         @sell_y_m_d = Date.today
