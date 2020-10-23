@@ -101,7 +101,7 @@
         %tr
           %th 火災保険
           %td 
-            = convertToJPY(@post.fire_insurance)
+            = convertToJPY(@post.fire_insurance/365*@sa.to_i)
             円
         %tr
           %th 測量費用
@@ -169,7 +169,7 @@
         %tr
           %th 保有期間
           %td
-            = @sa
+            = @sa.to_i
             日
       
       .residents
@@ -270,7 +270,6 @@
         ガイドライン
       = link_to "#", class:"info" do
         お知らせ
-  -# =image_tag asset_path("logo-white.png"), class: "footer__logo"
   .copyright
     © ZAIKO
 
