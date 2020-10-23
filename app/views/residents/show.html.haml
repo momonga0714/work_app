@@ -28,7 +28,7 @@
     %tr
       %th 締め日
       %td
-        - if @move_y || @move_m || @move_d != nil
+        - if @move_y && @move_m && @move_d
           = @move_y
           年
           = @move_m

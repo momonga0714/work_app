@@ -124,9 +124,9 @@
             = convertToJPY(@profit)
             円
         %tr
-          %th 総利益
+          %th 総利益（売却益＋家賃収入）
           %td 
-            = convertToJPY(@profit+@sum_income)
+            = convertToJPY(@profit.to_i + @sum_income.to_i)
             円
       (※１　入力がない場合は購入価格の80%としております。)
       %br 
@@ -182,25 +182,64 @@
                 %tr
                   %th 入居者名
                   %td 
-                    = @name
+                    = resident.name
                 %tr
                   %th 起算日
                   %td
-                    = @str_start
+                    - @name = resident.name
+                    - @income = resident.income
+                    - @day_rent = Date.new(resident.rent_y, resident.rent_m ,resident.rent_d)
+                    - @day_move = Date.new(resident.move_y, resident.move_m ,resident.move_d)
+                    - @day_buy = Date.new(@post.buy_year, @post.buy_month ,@post.buy_day)
+                    - @day_sell = Date.new(@post.sell_year, @post.sell_month ,@post.sell_day)
+                    - @today = Date.today
+
+                    - if @day_rent >= @day_buy # 起算日の決定
+                      = @day_rent.strftime("%Y年 %m月%d日")
+                    - elsif @day_rent <= @day_buy
+                      = @day_buy.strftime("%Y年 %m月%d日")
+                    - else
+                      = @today.strftime("%Y年 %m月%d日")
                 %tr
                   %th 締め日
                   %td
-                    = @str_fin
+                    - if @day_move <= @day_sell # 締め日の決定
+                      = @day_move.strftime("%Y年 %m月%d日")
+                    - elsif @day_move >= @day_sell
+                      = @day_sell.strftime("%Y年 %m月%d日")
+                    - else
+                      = @today.strftime("%Y年 %m月%d日")
                 %tr
                   %th 家賃
                   %td
-                    = convertToJPY(@income)
+                    = convertToJPY(resident.income)
                     円
                 %tr
                   %th #{resident.name}から頂いた総家賃
                   %td
-                    = convertToJPY(@sum_income)
-                    円
+                    - if @day_rent >= @day_buy && @day_move >= @day_sell # 退去日 - 入居日
+                      -  sa = @day_sell - @day_rent
+                      = convertToJPY(@income * 12 / 365 * sa.to_i)
+                      円
+                    - elsif @day_rent <= @day_buy && @day_move >= @day_sell # 退去日 - 購入日
+                      -  sa = @day_move - @day_buy
+                      -  @sum_income = @income * 12 / 365 * sa.to_i
+                      = convertToJPY(@sum_income)
+                      円
+                    - elsif @day_move <= @day_sell && @day_rent >= @day_buy # 売却日 - 入居日
+                      -  sa = @day_sell - @day_rent
+                      -  @sum_income = @income * 12 / 365 * sa.to_i
+                      = convertToJPY(@sum_income)
+                      円
+                    - elsif @day_move <= @day_sell && @day_rent <= @day_buy  # 売却日 - 購入日
+                      -  sa = @day_sell - @day_buy
+                      -  @sum_income = @income * 12 / 365 * sa.to_i
+                      = convertToJPY(@sum_income)
+                      円
+                    - else
+                      -  @sum_income = 0
+                      = convertToJPY(@sum_income)
+                      円
 .show-submit-btn
   = link_to "編集", "/posts/#{@post.id}/edit", class: "submit-btn-edit"
   = link_to "削除", "/posts/#{@post.id}", class: "submit-btn-delete",method: :delete

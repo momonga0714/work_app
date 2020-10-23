@@ -9,21 +9,21 @@
       入居開始日（起算日）
       = f.select :rent_y, {}, {prompt: "--"}, class: "rent_year", id: "input_error__rent_year", autofocus: true do
         - array = []
-        - array[0] = ""
+        - array[0] = "--"
         - for i in 1..70 do array[i] = 2050-i end
         = options_for_select(array,@rent_y)
       %span
         年
       = f.select :rent_m, {}, {prompt: "--"}, class: "rent_month", id: "input_error__rent_month", autofocus: true do
-        - array = []
-        - array[0] = ""
+        - array = []  
+        - array[0] = "--"
         - for i in 1..12 do array[i] = 0+i end
         = options_for_select(array,@rent_m)
       %span
         月
       = f.select :rent_d, {}, {prompt: "--"}, class: "rent_day", id: "input_error__rent_day", autofocus: true do
         - array = []
-        - array[0] = ""
+        - array[0] = "--"
         - for i in 1..31 do array[i] = 0+i end
         = options_for_select(array,@rent_d)
       %span

@@ -1,5 +1,5 @@
 class PostsController < ApplicationController
-  before_action :set_post, only: [:show,:edit,:update,:destroy,:create]
+  before_action :set_post, only: [:show,:edit,:update,:destroy]
   before_action :set_date_data, only:[:show,:update]
   
 
@@ -107,54 +107,30 @@ class PostsController < ApplicationController
       @date_sell =  @sell_y_m_d
       @date_buy = @buy_y_m_d
     # 総利益（売却益＋家賃収入）
+    
       @residents.each do |resident|
         @name = resident.name
         @income = resident.income
-        if resident.rent_y && resident.rent_m && resident.rent_d  # 起算日の計算
-            day = Date.new(resident.rent_y, resident.rent_m ,resident.rent_d)
-            @str_start = day.strftime("%Y年 %m月%d日")
-        elsif @post.buy_year && @post.buy_month && @post.buy_day
-            day = Date.new(@post.buy_year, @post.buy_month ,@post.buy_day)
-            @str_start = day.strftime("%Y年 %m月%d日")
-        else
-            day = Date.today
-            @str_start = day.strftime("%Y年 %m月%d日")
-        end
+        @day_rent = Date.new(resident.rent_y, resident.rent_m ,resident.rent_d)
+        @day_move = Date.new(resident.move_y, resident.move_m ,resident.move_d)
+        @day_buy = Date.new(@post.buy_year, @post.buy_month ,@post.buy_day)
+        @day_sell = Date.new(@post.sell_year, @post.sell_month ,@post.sell_day)
+        @today = Date.today
 
-        if resident.move_y && resident.move_m && resident.move_d # 締め日の計算
-          day = Date.new(resident.move_y, resident.move_m ,resident.move_d)
-          @str_fin = day.strftime("%Y年 %m月%d日")
-        elsif @post.sell_year && @post.sell_month && @post.sell_day 
-          day = Date.new(@post.sell_year, @post.sell_month ,@post.sell_day)
-          @str_fin = day.strftime("%Y年 %m月%d日")
-        else
-          day = Date.today
-          @str_fin = day.strftime("%Y年 %m月%d日")
-        end
-
-        if  resident.rent_y  && resident.move_y 
-          d1 = Date.new(resident.rent_y, resident.rent_m ,resident.rent_d)
-          d2 = Date.new(resident.move_y, resident.move_m ,resident.move_d)
-          sa = d2 - d1
-          @sum_income = resident.income * 12 / 365 * sa.to_i
-        elsif resident.rent_y  && resident.move_y == nil
-          d1 = Date.new(resident.rent_y, resident.rent_m ,resident.rent_d)
-          d2 = @date_sell
-          sa = d2 - d1
-          @sum_income = resident.income * 12 / 365 * sa.to_i
-        elsif resident.rent_y == nil && resident.move_y 
-          d1 = @date_buy
-          d2 = Date.new(resident.move_y, resident.move_m ,resident.move_d)
-          sa = d2 - d1
-          @sum_income = resident.income * 12 / 365 * sa.to_i
-        elsif resident.rent_y == nil && resident.move_y == nil
-          d1 = @date_buy
-          d2 = @date_sell
-          sa = d2 - d1
-          @sum_income = resident.income * 12 / 365 * sa.to_i
+        if @day_rent >= @day_buy && @day_move >= @day_sell # 退去日 - 入居日
+          sa = @day_move - @day_rent
+          @sum_income = @income * 12 / 365 * sa.to_i
+        elsif @day_rent <= @day_buy && @day_move >= @day_sell # 退去日 - 購入日
+          sa = @day_move - @day_buy
+          @sum_income = @income * 12 / 365 * sa.to_i
+        elsif @day_move <= @day_sell && @day_rent >= @day_buy # 売却日 - 入居日
+          sa = @day_sell - @day_rent
+          @sum_income = @income * 12 / 365 * sa.to_i
+        elsif @day_move <= @day_sell && @day_rent <= @day_buy  # 売却日 - 購入日
+          sa = @day_sell - @day_buy
+          @sum_income = @income * 12 / 365 * sa.to_i
         else
           @sum_income = 0
-          
         end
       end # each文のend
 
@@ -165,8 +141,7 @@ class PostsController < ApplicationController
   end
 
   def update 
-    if Date.new(post_params[:buy_year].to_i, post_params[:buy_month].to_i ,post_params[:buy_day].to_i) <= Date.new(post_params[:sell_year].to_i, post_params[:sell_month].to_i ,post_params[:sell_day].to_i)
-      @post.update(post_params)
+    if @post.update(post_params)
       redirect_to post_path(@post.id)
     else
       render :edit
@@ -201,8 +176,7 @@ class PostsController < ApplicationController
       if @post.buy_year && @post.buy_month && @post.buy_day && @post.sell_year && @post.sell_month && @post.sell_day
         @buy_y_m_d = Date.new(@post.buy_year, @post.buy_month ,@post.buy_day)
         @sell_y_m_d = Date.new(@post.sell_year, @post.sell_month ,@post.sell_day)
-        # @params_buy = Date.new(post_params[:buy_year].to_i, post_params[:buy_month].to_i ,post_params[:buy_day].to_i)
-        # @params_sell = Date.new(post_params[:sell_year].to_i, post_params[:sell_month].to_i ,post_params[:sell_day].to_i)
+        
       else
         @buy_y_m_d = Date.today
         @sell_y_m_d = Date.today
