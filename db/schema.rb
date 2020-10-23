@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_20_004256) do
+ActiveRecord::Schema.define(version: 2020_10_23_090547) do
 
   create_table "posts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
@@ -25,12 +25,6 @@ ActiveRecord::Schema.define(version: 2020_10_20_004256) do
     t.integer "sell", default: 0, null: false
     t.integer "surveying_cost", default: 0, null: false
     t.integer "sell_stamp_cost", default: 0, null: false
-    t.integer "buy_year"
-    t.integer "buy_month"
-    t.integer "buy_day"
-    t.integer "sell_year"
-    t.integer "sell_month"
-    t.integer "sell_day"
     t.integer "debt", default: 0, null: false
     t.integer "net_worth", default: 0, null: false
     t.integer "cash_flow", default: 0, null: false
@@ -46,21 +40,19 @@ ActiveRecord::Schema.define(version: 2020_10_20_004256) do
     t.integer "m_repair_fund", default: 0, null: false
     t.bigint "user_id"
     t.integer "values", default: 0, null: false
+    t.date "str_date", null: false
+    t.date "fin_date", null: false
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
   create_table "residents", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
     t.integer "income", default: 0
-    t.integer "rent_y"
-    t.integer "rent_m"
-    t.integer "rent_d"
-    t.integer "move_y"
-    t.integer "move_m"
-    t.integer "move_d"
     t.bigint "post_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.date "rent_date", null: false
+    t.date "move_date", null: false
     t.index ["post_id"], name: "index_residents_on_post_id"
   end
 

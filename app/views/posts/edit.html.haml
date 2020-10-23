@@ -14,53 +14,16 @@
             物件名
         = f.text_field :name, class: "exhibitInput"
         .input__birthday__select
-          .input__birthday__select__year 
-            物件購入日（決済日）
-            = f.select :buy_year, {}, {prompt: "--"}, class: "birth_year", id: "input_error__birth_year", autofocus: true do
-              - array = []
-              - array[0] = "--"
-              - for i in 1..70 do array[i] = 2050-i end
-              = options_for_select(array,@post.buy_year)
-            %span
-              年
-            = f.select :buy_month, {}, {prompt: "--"}, class: "birth_month", id: "input_error__birth_month", autofocus: true do
-              - array = []
-              - array[0] = "--"
-              - for i in 1..12 do array[i] = 0+i end
-              = options_for_select(array,@post.buy_month)
-            %span
-              月
-            = f.select :buy_day, {}, {prompt: "--"}, class: "birth_day", id: "input_error__birth_day", autofocus: true do
-              - array = []
-              - array[0] = "--"
-              - for i in 1..31 do array[i] = 0+i end
-              = options_for_select(array,@post.buy_day)
-            %span
-              日
-        .input__birthday__select
-          .input__birthday__select__year 
-            物件売却日（決済日）
-            = f.select :sell_year, {}, {prompt: "--"}, class: "birth_year", id: "input_error__birth_year", autofocus: true do
-              - array = []
-              - array[0] = "--"
-              - for i in 1..70 do array[i] = 2050-i end
-              = options_for_select(array,@post.sell_year)
-            %span
-              年
-            = f.select :sell_month, {}, {prompt: "--"}, class: "birth_month", id: "input_error__birth_month", autofocus: true do
-              - array = []
-              - array[0] = "--"
-              - for i in 1..12 do array[i] = 0+i end
-              = options_for_select(array,@post.sell_month)
-            %span
-              月
-            = f.select :sell_day, {}, {prompt: "--"}, class: "birth_day", id: "input_error__birth_day", autofocus: true do
-              - array = []
-              - array[0] = "--"
-              - for i in 1..31 do array[i] = 0+i end
-              = options_for_select(array,@post.sell_day)
-            %span
-              日
+          .input__birthday__select__year
+          .exhibit__main__itemProfile__inputForm__sellDetails__formBox
+            .exhibit__main__itemProfile__inputForm__sellDetails__formBox__brand
+              .exhibit__main__itemProfile__inputForm__sellDetails__formBox__brand__write
+                物件購入日（決済日）
+              = f.date_select :str_date,{:use_month_numbers => true}
+            .input__birthday__select__year 
+              .exhibit__main__itemProfile__inputForm__sellDetails__formBox__brand__write
+                物件売却日（決済日）
+              = f.date_select :fin_date,{:use_month_numbers => true}
         
         .exhibit__main__itemProfile__inputForm__sellGoods__description
           .notation

@@ -25,8 +25,8 @@ class PostsController < ApplicationController
 
   def show
      # 保有期間計算
-      if @post.buy_year && @post.buy_month && @post.buy_day
-        if @post.sell_year && @post.sell_month && @post.sell_day
+      if @post.str_date
+        if @post.fin_date
           d1 = @buy_y_m_d
           d2 = @sell_y_m_d
           @sa = d2 - d1
@@ -38,7 +38,6 @@ class PostsController < ApplicationController
       else
         @sa = 0
       end
-
     # 入居者情報
       @resident = Resident.new
       @residents = @post.residents
@@ -58,32 +57,24 @@ class PostsController < ApplicationController
       else
         @registration_fee = 0
       end
-    
     # 「固定資産税評価額相当額」計算式
       if @post.values != 0
         @temporary_values = @post.values
       else
         @temporary_values = (@post.buy * 0.8).floor
       end
-
     # 「不動産取得税」計算式
       @acquisition_tax = (@temporary_values*0.014).floor
-
     # 「固定資産税」計算式
       @property_tax = ((@temporary_values*0.6*0.003) + (@temporary_values*0.4*0.014)).floor / 365 * @sa.to_i
-
     # 管理費（マンション）
       @m_management_fee = @post.m_management_fee * 12 / 365 * @sa.to_i
-
     # 積立金（マンション）
       @m_repair_fund = @post.m_repair_fund * 12 / 365 * @sa.to_i
-
     # １日あたり金利計算
       @interest_rate = @post.interest_rate * 12 / 365 * @sa.to_i
-
     # 物件運営管理費（集金代行など費用について）
       @management_fee = @post.management_fee * 12 / 365 * @sa.to_i
-
     # 仲介手数料（売却時）
       if @post.sell != 0
         @brokerage_fee_sell = ((@post.sell*0.03+60000)*1.1).floor
@@ -98,7 +89,7 @@ class PostsController < ApplicationController
                             @management_fee + @post.fire_insurance + @post.surveying_cost + 
                               @post.other_cost + @brokerage_fee_sell
     # 売却益
-    if @post.sell_year && @post.sell_month && @post.sell_day
+    if @post.fin_date
       @profit = @post.sell - @total_costs - @brokerage_fee_sell
     else
       @profit = 0
@@ -107,37 +98,39 @@ class PostsController < ApplicationController
       @date_sell =  @sell_y_m_d
       @date_buy = @buy_y_m_d
     # 総利益（売却益＋家賃収入）
-    
+      @arry = []
       @residents.each do |resident|
         @name = resident.name
         @income = resident.income
-        @day_rent = Date.new(resident.rent_y, resident.rent_m ,resident.rent_d)
-        @day_move = Date.new(resident.move_y, resident.move_m ,resident.move_d)
-        @day_buy = Date.new(@post.buy_year, @post.buy_month ,@post.buy_day)
-        @day_sell = Date.new(@post.sell_year, @post.sell_month ,@post.sell_day)
+        @day_rent = resident.rent_date
+        @day_move = resident.move_date
+        @day_buy = @post.str_date
+        @day_sell = @post.fin_date
         @today = Date.today
-
         if @day_rent >= @day_buy && @day_move >= @day_sell # 退去日 - 入居日
           sa = @day_move - @day_rent
           @sum_income = @income * 12 / 365 * sa.to_i
+          @arry << @sum_income
         elsif @day_rent <= @day_buy && @day_move >= @day_sell # 退去日 - 購入日
           sa = @day_move - @day_buy
           @sum_income = @income * 12 / 365 * sa.to_i
+          @arry << @sum_income
         elsif @day_move <= @day_sell && @day_rent >= @day_buy # 売却日 - 入居日
           sa = @day_sell - @day_rent
           @sum_income = @income * 12 / 365 * sa.to_i
+          @arry << @sum_income
         elsif @day_move <= @day_sell && @day_rent <= @day_buy  # 売却日 - 購入日
           sa = @day_sell - @day_buy
           @sum_income = @income * 12 / 365 * sa.to_i
+          @arry << @sum_income
         else
           @sum_income = 0
+          @arry << @sum_income
         end
       end # each文のend
-
   end
 
   def edit
-    
   end
 
   def update 
@@ -164,7 +157,7 @@ class PostsController < ApplicationController
           :management_fee,:fire_insurance,:sell,:surveying_cost,:sell_stamp_cost,:buy_year,:buy_month,
           :buy_day,:sell_year,:sell_month,:sell_day,:debt,:net_worth,:cash_flow,:ownership_period,
           :house_layout,:m2,:b_income,:other_cost,:m_management_fee,:m_repair_fund,:rent_year,:rent_month,
-          :rent_day,:move_year,:move_month,:move_day,:values
+          :rent_day,:move_year,:move_month,:move_day,:values,:str_date,:fin_date
         )
     end
 
@@ -173,10 +166,9 @@ class PostsController < ApplicationController
     end
 
     def set_date_data  
-      if @post.buy_year && @post.buy_month && @post.buy_day && @post.sell_year && @post.sell_month && @post.sell_day
-        @buy_y_m_d = Date.new(@post.buy_year, @post.buy_month ,@post.buy_day)
-        @sell_y_m_d = Date.new(@post.sell_year, @post.sell_month ,@post.sell_day)
-        
+      if @post.str_date && @post.fin_date
+        @buy_y_m_d = @post.str_date
+        @sell_y_m_d = @post.fin_date
       else
         @buy_y_m_d = Date.today
         @sell_y_m_d = Date.today

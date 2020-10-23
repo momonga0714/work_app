@@ -7,51 +7,11 @@
   .input__rentday__select
     .input__rentday__select__year 
       入居開始日（起算日）
-      = f.select :rent_y, {},  class: "rent_year", id: "input_error__rent_year", autofocus: true do
-        - array = []
-        - array[0] = "--"
-        - for i in 1..70 do array[i] = 2050-i end
-        = options_for_select(array)
-      %span
-        年
-      = f.select :rent_m, {},  class: "rent_month", id: "input_error__rent_month", autofocus: true do
-        - array = []
-        - array[0] = "--"
-        - for i in 1..12 do array[i] = 0+i end
-        = options_for_select(array)
-      %span
-        月
-      = f.select :rent_d, {},  class: "rent_day", id: "input_error__rent_day", autofocus: true do
-        - array = []
-        - array[0] = "--"
-        - for i in 1..31 do array[i] = 0+i end
-        = options_for_select(array)
-      %span
-        日
+      = f.date_select :rent_date,{:use_month_numbers => true}
   .input__rentday__select
     .input__rentday__select__year 
-      退去日または締め日　
-      = f.select :move_y, {}, {prompt: "--"}, class: "move_year", id: "input_error__move_year", autofocus: true do
-        - array = []
-        - array[0] = "--"
-        - for i in 1..70 do array[i] = 2050-i end
-        = options_for_select(array)
-      %span
-        年
-      = f.select :move_m, {}, {prompt: "--"}, class: "move_month", id: "input_error__move_month", autofocus: true do
-        - array = []
-        - array[0] = "--"
-        - for i in 1..12 do array[i] = 0+i end
-        = options_for_select(array)
-      %span
-        月
-      = f.select :move_d, {}, {prompt: "--"}, class: "move_day", id: "input_error__move_day", autofocus: true do
-        - array = []
-        - array[0] = "--"
-        - for i in 1..31 do array[i] = 0+i end
-        = options_for_select(array)
-      %span
-        日
+      退去日または締め日
+      = f.date_select :move_date,{:use_month_numbers => true}
   .exhibit__main__itemProfile__inputForm__delivery__formBox__burden
     .exhibit__main__itemProfile__inputForm__delivery__formBox__burden__select
       .notation

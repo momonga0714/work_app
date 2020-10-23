@@ -19,22 +19,17 @@
     %tr
       %th 起算日
       %td
-        = @rent_y
-        年
-        = @rent_m
-        月
-        = @rent_d
-        日
+        - if @rent_y_m_d
+          = @rent_y_m_d.strftime("%Y年 %m月%d日")
+        - else
+          - day = Date.today
+          - str = day.strftime("%Y年 %m月%d日")
+          = str
     %tr
       %th 締め日
       %td
-        - if @move_y && @move_m && @move_d
-          = @move_y
-          年
-          = @move_m
-          月
-          = @move_d
-          日
+        - if @move_y_m_d
+          = @move_y_m_d.strftime("%Y年 %m月%d日")
         - else
           - day = Date.today
           - str = day.strftime("%Y年 %m月%d日")

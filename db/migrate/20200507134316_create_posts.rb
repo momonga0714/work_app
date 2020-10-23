@@ -13,12 +13,6 @@ class CreatePosts < ActiveRecord::Migration[5.2]
       t.integer :sell, null: false,default: 0
       t.integer :surveying_cost, null: false,default: 0
       t.integer :sell_stamp_cost, null: false,default: 0
-      t.integer :buy_year
-      t.integer :buy_month
-      t.integer :buy_day
-      t.integer :sell_year
-      t.integer :sell_month
-      t.integer :sell_day
       t.integer :debt, null: false,default: 0
       t.integer :net_worth, null: false,default: 0
       t.integer :cash_flow, null: false,default: 0

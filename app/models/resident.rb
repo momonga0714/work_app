@@ -1,16 +1,10 @@
 class Resident < ApplicationRecord
   belongs_to :post
 
-  # validates :move_y, numericality: {only_integer: true}, :numericality => { :greater_than_or_equal_to =>  :rent_y } 
-  # validates :move_m, numericality: {only_integer: true}, :numericality => { :greater_than_or_equal_to =>  :rent_m } 
-  # validates :move_d, numericality: {only_integer: true}, :numericality => { :greater_than_or_equal_to =>  :rent_d } 
-  # validates :rent_y, numericality: {only_integer: true}
-  # validates :rent_m, numericality: {only_integer: true}
-  # validates :rent_d, numericality: {only_integer: true}
-  validates :move_y, numericality: {only_integer: true},:numericality => { :greater_than_or_equal_to =>  :rent_y } 
-  validates :move_m, numericality: {only_integer: true}
-  validates :move_d, numericality: {only_integer: true}
-  validates :rent_y, numericality: {only_integer: true}
-  validates :rent_m, numericality: {only_integer: true}
-  validates :rent_d, numericality: {only_integer: true}
+  
+  validate :date_not_before_move
+
+  def date_not_before_move
+    errors.add(:rent_date, "は退去日以前を選択してください") if rent_date.nil? || rent_date > move_date
+  end
 end

@@ -5,17 +5,18 @@ $light_blue: #38AEF0;
 $light_gray: #999;
 $black: #434a54;
 $alert_orange: #F35500;
+$light_green: #55c500;
 
 .notification {
   .notice {
-    background-color: $light_blue;
+    background-color: $light_green;
     color: $white;
     text-align: center;
   }
 
   .alert {
-    background-color: $alert_orange;
-    color: $white;
+    background-color: $white;
+    color: $alert_orange;
     text-align: center;
   }
 }
