@@ -72,7 +72,21 @@ class PostsController < ApplicationController
     # 積立金（マンション）
       @m_repair_fund = @post.m_repair_fund * 12 / 365 * @sa.to_i
     # １日あたり金利計算
-      @interest_rate = @post.interest_rate * 12 / 365 * @sa.to_i
+
+      # 月利(年利x%)
+      # 月単位の支払いなので、月利で計算します。
+      interest = (@post.interest_rate.to_f / 100) / 365
+      # 支払い回数(35年)
+      number_of_payments = @post.pay_count * 365
+      # 借入金額
+      borrowing_amount = @post.borrowing
+      interest_rate_sum = []
+      i = 0
+        while i < (@post.fin_date - @post.str_date).floor do
+          i += 1
+          interest_rate_sum << -(Exonio.ipmt(interest, i, number_of_payments, borrowing_amount)).floor
+        end
+      @interest_rate = interest_rate_sum.sum
     # 物件運営管理費（集金代行など費用について）
       @management_fee = @post.management_fee * 12 / 365 * @sa.to_i
     # 仲介手数料（売却時）
@@ -157,7 +171,7 @@ class PostsController < ApplicationController
           :management_fee,:fire_insurance,:sell,:surveying_cost,:sell_stamp_cost,:buy_year,:buy_month,
           :buy_day,:sell_year,:sell_month,:sell_day,:debt,:net_worth,:cash_flow,:ownership_period,
           :house_layout,:m2,:b_income,:other_cost,:m_management_fee,:m_repair_fund,:rent_year,:rent_month,
-          :rent_day,:move_year,:move_month,:move_day,:values,:str_date,:fin_date
+          :rent_day,:move_year,:move_month,:move_day,:values,:str_date,:fin_date,:borrowing,:pay_count
         )
     end
 

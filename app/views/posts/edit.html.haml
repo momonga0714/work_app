@@ -63,8 +63,18 @@
           .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state
             .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state__select
               .notation
-                金利(1ヶ月あたり)
+                借入額
+            = f.text_field :borrowing, class: "exhibitInput"
+          .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state
+            .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state__select
+              .notation
+                金利(%)
             = f.text_field :interest_rate, class: "exhibitInput"
+          .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state
+            .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state__select
+              .notation
+                借入期間（年）
+            = f.text_field :pay_count, class: "exhibitInput"
           .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state
             .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state__select
               .notation

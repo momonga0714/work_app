@@ -35,6 +35,11 @@
             = convertToJPY(@temporary_values)
             円
         %tr
+          %th 借入金額
+          %td
+            = convertToJPY(@post.borrowing)
+            円
+        %tr
           %th 仲介手数料（購入時）
           %td
             = convertToJPY(@brokerage_fee_buy)
@@ -75,7 +80,7 @@
             = convertToJPY(@post.repair_cost)
             円
         %tr
-          %th 金利
+          %th 金利支払い合計
           %td 
             = convertToJPY(@interest_rate)
             円
