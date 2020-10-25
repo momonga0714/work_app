@@ -20,11 +20,11 @@
             .exhibit__main__itemProfile__inputForm__sellDetails__formBox__brand
               .exhibit__main__itemProfile__inputForm__sellDetails__formBox__brand__write
                 物件購入日（決済日）
-              = f.date_select :str_date,{:use_month_numbers => true}
+              = f.date_select :str_date,{:use_month_numbers => true,:start_year => 2000,:end_year => 2040}
             .input__birthday__select__year 
               .exhibit__main__itemProfile__inputForm__sellDetails__formBox__brand__write
                 物件売却日（決済日）
-              = f.date_select :fin_date,{:use_month_numbers => true}
+              = f.date_select :fin_date,{:use_month_numbers => true,:start_year => 2000,:end_year => 2040}
             
           .exhibit__main__itemProfile__inputForm__sellGoods__description
             .notation

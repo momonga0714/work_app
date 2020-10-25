@@ -72,21 +72,20 @@ class PostsController < ApplicationController
     # 積立金（マンション）
       @m_repair_fund = @post.m_repair_fund * 12 / 365 * @sa.to_i
     # １日あたり金利計算
-
-      # 月利(年利x%)
-      # 月単位の支払いなので、月利で計算します。
-      interest = (@post.interest_rate.to_f / 100) / 365
-      # 支払い回数(35年)
-      number_of_payments = @post.pay_count * 365
-      # 借入金額
-      borrowing_amount = @post.borrowing
-      interest_rate_sum = []
-      i = 0
-        while i < (@post.fin_date - @post.str_date).floor do
-          i += 1
-          interest_rate_sum << -(Exonio.ipmt(interest, i, number_of_payments, borrowing_amount)).floor
-        end
-      @interest_rate = interest_rate_sum.sum
+      if @post.interest_rate != 0
+        interest = (@post.interest_rate.to_f / 100) / 365
+        number_of_payments = @post.pay_count * 365
+        borrowing_amount = @post.borrowing
+        interest_rate_sum = []
+        i = 0
+          while i < (@post.fin_date - @post.str_date).floor do
+            i += 1
+            interest_rate_sum << -(Exonio.ipmt(interest, i, number_of_payments, borrowing_amount)).floor
+          end
+        @interest_rate = interest_rate_sum.sum
+      else
+        @interest_rate = 0
+      end
     # 物件運営管理費（集金代行など費用について）
       @management_fee = @post.management_fee * 12 / 365 * @sa.to_i
     # 仲介手数料（売却時）
