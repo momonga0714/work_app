@@ -21,8 +21,16 @@ class ResidentsController < ApplicationController
   end
 
   def show
-    day_start = @resident.rent_date
-    day_finish = @resident.move_date
+    if @resident.rent_date >= @post.str_date
+      day_start = @resident.rent_date
+    else
+      day_start = @post.str_date
+    end
+    if @resident.move_date <= @post.fin_date
+      day_finish = @resident.move_date
+    else
+      day_finish = @post.fin_date
+    end
     today = Date.today
     sa = day_finish - day_start
     @income = (@resident.income * 12 / 365).round * sa.to_i
