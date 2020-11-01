@@ -24,6 +24,8 @@ class PostsController < ApplicationController
   end
 
   def show
+    # 消費税
+      consumption_tax = 1.1
      # 保有期間計算
       if @post.str_date
         if @post.fin_date
@@ -42,31 +44,40 @@ class PostsController < ApplicationController
       @resident = Resident.new
       @residents = @post.residents
     # 仲介手数料（購入時）
+    min_border = 2000000
       if @post.buy != 0
-        @brokerage_fee_buy = ((@post.buy*0.03+60000)*1.1).floor
+        if @post.buy > 4000000
+          @brokerage_fee_buy = ((@post.buy * 0.03 + 60000) * consumption_tax).floor
+        elsif @post.buy <= 4000000 && @post.buy > min_border
+          @brokerage_fee_buy = (((@post.buy - min_border) * 0.04 + min_border * 0.05) * consumption_tax).floor
+        elsif @post.buy <= min_border
+          @brokerage_fee_buy = ((@post.buy * 0.05) * consumption_tax).floor
+        end
       else
         @brokerage_fee_buy = 0
       end
     # 登記費用
+      # 司法書士報酬
+        reward = 60000
       if @post.buy != 0
         if @post.values != 0
-          @registration_fee = (@post.values*0.02).floor+50000
+          @registration_fee = (@post.values * 0.015 + @post.building_values * 0.02).floor + (reward * consumption_tax).floor
         else
-          @registration_fee = (@post.buy*0.02).floor+50000
+          @registration_fee = (@post.buy * 0.02).floor + (reward * consumption_tax).floor
         end
       else
         @registration_fee = 0
       end
     # 「固定資産税評価額相当額」計算式
       if @post.values != 0
-        @temporary_values = @post.values
+        @temporary_values = @post.values + @post.building_values
       else
         @temporary_values = (@post.buy * 0.8).floor
       end
     # 「不動産取得税」計算式
-      @acquisition_tax = (@temporary_values*0.014).floor
+      @acquisition_tax = (@temporary_values * 0.014).floor
     # 「固定資産税」計算式
-      @property_tax = ((@temporary_values*0.6*0.003) + (@temporary_values*0.4*0.014)).floor / 365 * @sa.to_i
+      @property_tax = ((@temporary_values * 0.6 * 0.003) + (@temporary_values * 0.4 * 0.014)).floor / 365 * @sa.to_i
     # 管理費（マンション）
       @m_management_fee = @post.m_management_fee * 12 / 365 * @sa.to_i
     # 積立金（マンション）
@@ -90,7 +101,7 @@ class PostsController < ApplicationController
       @management_fee = @post.management_fee * 12 / 365 * @sa.to_i
     # 仲介手数料（売却時）
       if @post.sell != 0
-        @brokerage_fee_sell = ((@post.sell*0.03+60000)*1.1).floor
+        @brokerage_fee_sell = ((@post.sell * 0.03 + 60000) * consumption_tax).floor
       else
         @brokerage_fee_sell = 0
       end
@@ -170,7 +181,7 @@ class PostsController < ApplicationController
           :management_fee,:fire_insurance,:sell,:surveying_cost,:sell_stamp_cost,:buy_year,:buy_month,
           :buy_day,:sell_year,:sell_month,:sell_day,:debt,:net_worth,:cash_flow,:ownership_period,
           :house_layout,:m2,:b_income,:other_cost,:m_management_fee,:m_repair_fund,:rent_year,:rent_month,
-          :rent_day,:move_year,:move_month,:move_day,:values,:str_date,:fin_date,:borrowing,:pay_count
+          :rent_day,:move_year,:move_month,:move_day,:values,:building_values,:str_date,:fin_date,:borrowing,:pay_count
         )
     end
 
