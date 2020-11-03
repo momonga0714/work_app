@@ -46,6 +46,11 @@
               .notation
                 建物評価額（不明であれば0と入力ください。）
             = f.text_field :building_values, class: "exhibitInput"
+          .exhibit__main__itemProfile__inputForm__sellDetails__formBox__brand
+            .exhibit__main__itemProfile__inputForm__sellDetails__formBox__brand__write
+              .notation
+                購入時仲介手数料（正規手数料の場合は0、仲介手数料かからない場合は0を消してください）
+            = f.text_field :brokerage_fee, class: "exhibitInput"
           .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state
             .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state__select
               .notation
@@ -107,6 +112,11 @@
               .notation
                 売却価格
             = f.text_field :sell, class: "exhibitInput"
+          .exhibit__main__itemProfile__inputForm__sellDetails__formBox__brand
+            .exhibit__main__itemProfile__inputForm__sellDetails__formBox__brand__write
+              .notation
+                売却時仲介手数料（正規手数料の場合は0、仲介手数料かからない場合は0を消してください）
+            = f.text_field :brokerage_fee_sell, class: "exhibitInput"
           .exhibit__main__itemProfile__inputForm__delivery__formBox__area
             .exhibit__main__itemProfile__inputForm__delivery__formBox__area__select
               .notation

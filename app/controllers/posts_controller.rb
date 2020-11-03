@@ -7,6 +7,7 @@ class PostsController < ApplicationController
   def index
     @posts = Post.page(params[:page]).per(PER)
     @resident = Resident.all
+    
   end
 
   def new
@@ -45,7 +46,7 @@ class PostsController < ApplicationController
       @residents = @post.residents
     # 仲介手数料（購入時）
     min_border = 2000000
-      if @post.buy != 0
+      if @post.buy != 0 && @post.brokerage_fee == 0
         if @post.buy > 4000000
           @brokerage_fee_buy = ((@post.buy * 0.03 + 60000) * consumption_tax).floor
         elsif @post.buy <= 4000000 && @post.buy > min_border
@@ -53,6 +54,8 @@ class PostsController < ApplicationController
         elsif @post.buy <= min_border
           @brokerage_fee_buy = ((@post.buy * 0.05) * consumption_tax).floor
         end
+      elsif @post.brokerage_fee
+        @brokerage_fee_buy = @post.brokerage_fee
       else
         @brokerage_fee_buy = 0
       end
@@ -100,8 +103,17 @@ class PostsController < ApplicationController
     # 物件運営管理費（集金代行など費用について）
       @management_fee = @post.management_fee * 12 / 365 * @sa.to_i
     # 仲介手数料（売却時）
-      if @post.sell != 0
-        @brokerage_fee_sell = ((@post.sell * 0.03 + 60000) * consumption_tax).floor
+      min_border = 2000000
+      if @post.sell != 0 && @post.brokerage_fee_sell == 0
+        if @post.sell > 4000000
+          @brokerage_fee_sell = ((@post.sell * 0.03 + 60000) * consumption_tax).floor
+        elsif @post.sell <= 4000000 && @post.sell > min_border
+          @brokerage_fee_sell = (((@post.sell - min_border) * 0.04 + min_border * 0.05) * consumption_tax).floor
+        elsif @post.sell <= min_border
+          @brokerage_fee_sell = ((@post.sell * 0.05) * consumption_tax).floor
+        end
+      elsif @post.brokerage_fee_sell
+        @brokerage_fee_sell = @post.brokerage_fee_sell
       else
         @brokerage_fee_sell = 0
       end
@@ -114,7 +126,7 @@ class PostsController < ApplicationController
                               @post.other_cost + @brokerage_fee_sell
     # 売却益
     if @post.fin_date
-      @profit = @post.sell - @total_costs - @brokerage_fee_sell
+      @profit = @post.sell - @total_costs
     else
       @profit = 0
     end
@@ -181,7 +193,8 @@ class PostsController < ApplicationController
           :management_fee,:fire_insurance,:sell,:surveying_cost,:sell_stamp_cost,:buy_year,:buy_month,
           :buy_day,:sell_year,:sell_month,:sell_day,:debt,:net_worth,:cash_flow,:ownership_period,
           :house_layout,:m2,:b_income,:other_cost,:m_management_fee,:m_repair_fund,:rent_year,:rent_month,
-          :rent_day,:move_year,:move_month,:move_day,:values,:building_values,:str_date,:fin_date,:borrowing,:pay_count
+          :rent_day,:move_year,:move_month,:move_day,:values,:building_values,:str_date,:fin_date,:borrowing,
+          :pay_count,:brokerage_fee,:brokerage_fee_sell
         )
     end
 

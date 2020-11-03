@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_11_01_013717) do
+ActiveRecord::Schema.define(version: 2020_11_03_042009) do
 
   create_table "posts", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
     t.string "name"
@@ -45,6 +45,8 @@ ActiveRecord::Schema.define(version: 2020_11_01_013717) do
     t.integer "pay_count", default: 0, null: false
     t.integer "borrowing", default: 0, null: false
     t.integer "building_values", default: 0, null: false
+    t.integer "brokerage_fee", default: 0
+    t.integer "brokerage_fee_sell", default: 0
     t.index ["user_id"], name: "index_posts_on_user_id"
   end
 
