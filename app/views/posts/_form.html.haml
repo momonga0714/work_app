@@ -1,0 +1,123 @@
+.exhibit__main__itemProfile__inputForm
+= form_with( model: @post, local: true) do |f|
+  .exhibit__main__itemProfile__inputForm__sellGoods
+    .exhibit__main__itemProfile__inputForm__sellGoods__name
+      .notation
+        物件名
+    = f.text_field :name, class: "exhibitInput"
+    .input__birthday__select
+      .input__birthday__select__year 
+
+      .exhibit__main__itemProfile__inputForm__sellDetails__formBox
+        .exhibit__main__itemProfile__inputForm__sellDetails__formBox__brand
+          .exhibit__main__itemProfile__inputForm__sellDetails__formBox__brand__write
+            物件購入日（決済日）
+          = f.date_select :str_date,{:use_month_numbers => true,:start_year => 2000,:end_year => 2040}
+        .input__birthday__select__year 
+          .exhibit__main__itemProfile__inputForm__sellDetails__formBox__brand__write
+            物件売却日（決済日）
+          = f.date_select :fin_date,{:use_month_numbers => true,:start_year => 2000,:end_year => 2040}
+        
+      .exhibit__main__itemProfile__inputForm__sellGoods__description
+        .notation
+          物件の説明（取得経緯など）
+      = f.text_field :explanation, class: "exhibitInput"
+      .exhibit__main__itemProfile__inputForm__sellDetails__formBox
+        .exhibit__main__itemProfile__inputForm__sellDetails__formBox__brand
+          .exhibit__main__itemProfile__inputForm__sellDetails__formBox__brand__write
+            .notation
+              購入金額
+          = f.text_field :buy, class: "exhibitInput"
+      .exhibit__main__itemProfile__inputForm__sellDetails__formBox__brand
+        .exhibit__main__itemProfile__inputForm__sellDetails__formBox__brand__write
+          .notation
+            土地評価額（不明であれば0と入力ください。）
+        = f.text_field :values, class: "exhibitInput"
+      .exhibit__main__itemProfile__inputForm__sellDetails__formBox__brand
+        .exhibit__main__itemProfile__inputForm__sellDetails__formBox__brand__write
+          .notation
+            建物評価額（不明であれば0と入力ください。）
+        = f.text_field :building_values, class: "exhibitInput"
+      .exhibit__main__itemProfile__inputForm__sellDetails__formBox__brand
+        .exhibit__main__itemProfile__inputForm__sellDetails__formBox__brand__write
+          .notation
+            購入時仲介手数料（正規手数料の場合は0、仲介手数料かからない場合は0を消してください）
+        = f.text_field :brokerage_fee, class: "exhibitInput"
+      .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state
+        .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state__select
+          .notation
+            管理費（マンション）
+        = f.text_field :m_management_fee, class: "exhibitInput"
+      .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state
+        .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state__select
+          .notation
+            修繕積立金（マンション）
+        = f.text_field :m_repair_fund, class: "exhibitInput"
+      .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state
+        .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state__select
+          .notation
+            印紙代（金消契約）
+        = f.text_field :buy_stamp_cost, class: "exhibitInput"
+      .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state
+        .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state__select
+          .notation
+            修繕費（現状回復）
+        = f.text_field :repair_cost, class: "exhibitInput"
+      .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state
+        .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state__select
+          .notation
+            借入額
+        = f.text_field :borrowing, class: "exhibitInput"
+      .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state
+        .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state__select
+          .notation
+            金利(%)
+        = f.text_field :interest_rate, class: "exhibitInput"
+      .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state
+        .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state__select
+          .notation
+            借入期間（年）
+        = f.text_field :pay_count, class: "exhibitInput"
+      .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state
+        .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state__select
+          .notation
+            入居付
+        = f.text_field :rent_cost, class: "exhibitInput"
+      .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state
+        .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state__select
+          .notation
+            銀行事務手数料
+        = f.text_field :banking_fee, class: "exhibitInput"
+      .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state
+        .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state__select
+          .notation
+            管理費(1ヶ月あたり)
+        = f.text_field :management_fee, class: "exhibitInput"
+      .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state
+        .exhibit__main__itemProfile__inputForm__sellDetails__formBox__state__select
+          .notation
+            火災保険（１年）
+        = f.text_field :fire_insurance, class: "exhibitInput"
+    .exhibit__main__itemProfile__inputForm__delivery__formBox  
+      .exhibit__main__itemProfile__inputForm__delivery__formBox__area
+        .exhibit__main__itemProfile__inputForm__delivery__formBox__area__select
+          .notation
+            売却価格
+        = f.text_field :sell, class: "exhibitInput"
+      .exhibit__main__itemProfile__inputForm__sellDetails__formBox__brand
+        .exhibit__main__itemProfile__inputForm__sellDetails__formBox__brand__write
+          .notation
+            売却時仲介手数料（正規手数料の場合は0、仲介手数料かからない場合は0を消してください）
+        = f.text_field :brokerage_fee_sell, class: "exhibitInput"
+      .exhibit__main__itemProfile__inputForm__delivery__formBox__area
+        .exhibit__main__itemProfile__inputForm__delivery__formBox__area__select
+          .notation
+            測量費用
+        = f.text_field :surveying_cost, class: "exhibitInput"
+      .exhibit__main__itemProfile__inputForm__delivery__formBox__days
+        .exhibit__main__itemProfile__inputForm__delivery__formBox__days__select
+          .notation
+            その他経費
+        = f.text_field :other_cost, class: "exhibitInput"
+      .exhibit__main__itemProfile__inputForm__warning
+  = f.submit :登録する ,class: "exhibitSubmit1"
