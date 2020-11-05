@@ -45,14 +45,12 @@ class PostsController < ApplicationController
       @resident = Resident.new
       @residents = @post.residents
     # 仲介手数料（購入時）
-    min_border = 2000000
+    min_fee = 180000
       if @post.buy != 0 && @post.brokerage_fee == 0
         if @post.buy > 4000000
           @brokerage_fee_buy = ((@post.buy * 0.03 + 60000) * consumption_tax).floor
-        elsif @post.buy <= 4000000 && @post.buy > min_border
-          @brokerage_fee_buy = (((@post.buy - min_border) * 0.04 + min_border * 0.05) * consumption_tax).floor
-        elsif @post.buy <= min_border
-          @brokerage_fee_buy = ((@post.buy * 0.05) * consumption_tax).floor
+        elsif @post.buy <= 4000000 
+          @brokerage_fee_buy = (min_fee * consumption_tax).floor
         end
       elsif @post.brokerage_fee
         @brokerage_fee_buy = @post.brokerage_fee
@@ -103,14 +101,12 @@ class PostsController < ApplicationController
     # 物件運営管理費（集金代行など費用について）
       @management_fee = @post.management_fee * 12 / 365 * @sa.to_i
     # 仲介手数料（売却時）
-      min_border = 2000000
+      min_fee = 180000
       if @post.sell != 0 && @post.brokerage_fee_sell == 0
         if @post.sell > 4000000
           @brokerage_fee_sell = ((@post.sell * 0.03 + 60000) * consumption_tax).floor
-        elsif @post.sell <= 4000000 && @post.sell > min_border
-          @brokerage_fee_sell = (((@post.sell - min_border) * 0.04 + min_border * 0.05) * consumption_tax).floor
-        elsif @post.sell <= min_border
-          @brokerage_fee_sell = ((@post.sell * 0.05) * consumption_tax).floor
+        elsif @post.sell <= 4000000
+          @brokerage_fee_sell = (min_fee * consumption_tax).floor
         end
       elsif @post.brokerage_fee_sell
         @brokerage_fee_sell = @post.brokerage_fee_sell
