@@ -245,7 +245,7 @@
                       円
 .show-submit-btn
   = link_to "編集", "/posts/#{@post.id}/edit", class: "submit-btn-edit"
-  = link_to "削除", "/posts/#{@post.id}", class: "submit-btn-delete",method: :delete
+  = link_to "削除", "/posts/#{@post.id}", class: "submit-btn-delete",method: :delete,data: { confirm: '本当に削除してよろしいですか？' }
 .footer
   %ul.footer__contents
     %li.footer__contents__content
